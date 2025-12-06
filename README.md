@@ -51,6 +51,7 @@ Variables for the environment
 | SERVER_JWT_TIMEOUT | JWT duration time                 |
 | DB_DIALECT         | "mysql", among others             |
 | DB_HOST            | Database host                     |
+| DB_PORT            | Database port                     |
 | DB_USER            | Database username                 |
 | DB_PASS            | Database password                 |
 | DB_NAME            | Database name                     |
