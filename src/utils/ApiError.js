@@ -1,3 +1,5 @@
+import { StatusCodes } from 'http-status-codes';
+
 const DEFAULT_ERRORS = {
   BAD_TOKEN: {
     code: "BAD_TOKEN",
@@ -70,7 +72,7 @@ export class NotFoundError extends ApiError {
     message = DEFAULT_ERRORS.NOT_FOUND.message,
     type = DEFAULT_ERRORS.NOT_FOUND.code
   ) {
-    super(message, 404, type);
+    super(message, StatusCodes.NOT_FOUND, type);
   }
 }
 
@@ -79,7 +81,7 @@ export class BadRequestError extends ApiError {
     message = DEFAULT_ERRORS.BAD_REQUEST.message,
     type = DEFAULT_ERRORS.BAD_REQUEST.code
   ) {
-    super(message, 400, type);
+    super(message, StatusCodes.BAD_REQUEST, type);
   }
 }
 export class ValidationError extends ApiError {
@@ -87,7 +89,7 @@ export class ValidationError extends ApiError {
     message = DEFAULT_ERRORS.VALIDATION.message,
     type = DEFAULT_ERRORS.VALIDATION.code
   ) {
-    super(message, 400, type);
+    super(message, StatusCodes.BAD_REQUEST, type);
   }
 }
 
@@ -96,7 +98,7 @@ export class UnauthorizedError extends ApiError {
     message = DEFAULT_ERRORS.UNAUTHORIZED.message,
     type = DEFAULT_ERRORS.UNAUTHORIZED.code
   ) {
-    super(message, 401, type);
+    super(message, StatusCodes.UNAUTHORIZED, type);
   }
 }
 export class ForbiddenError extends ApiError {
@@ -104,7 +106,7 @@ export class ForbiddenError extends ApiError {
     message = DEFAULT_ERRORS.FORBIDDEN.message,
     type = DEFAULT_ERRORS.FORBIDDEN.code
   ) {
-    super(message, 403, type);
+    super(message, StatusCodes.FORBIDDEN, type);
   }
 }
 
@@ -113,7 +115,7 @@ export class InternalServerError extends ApiError {
     message = DEFAULT_ERRORS.SERVER_ERROR.message,
     type = DEFAULT_ERRORS.SERVER_ERROR.code
   ) {
-    super(message, 500, type);
+    super(message, StatusCodes.INTERNAL_SERVER_ERROR, type);
   }
 }
 
@@ -122,7 +124,7 @@ export class BadTokenError extends ApiError {
     message = DEFAULT_ERRORS.BAD_TOKEN.message,
     type = DEFAULT_ERRORS.BAD_TOKEN.code
   ) {
-    super(message, 401, type);
+    super(message, StatusCodes.UNAUTHORIZED, type);
   }
 }
 
@@ -131,6 +133,6 @@ export class TokenExpiredError extends ApiError {
     message = DEFAULT_ERRORS.TOKEN_EXPIRED.message,
     type = DEFAULT_ERRORS.TOKEN_EXPIRED.code
   ) {
-    super(message, 401, type);
+    super(message, StatusCodes.UNAUTHORIZED, type);
   }
 }

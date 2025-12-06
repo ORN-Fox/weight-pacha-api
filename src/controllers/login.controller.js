@@ -1,11 +1,15 @@
+import { StatusCodes } from 'http-status-codes';
 import * as Yup from "yup";
-import User from "../models/User";
-import JwtService from "../services/jwt.service";
+
 import {
   BadRequestError,
   UnauthorizedError,
   ValidationError,
 } from "../utils/ApiError";
+
+import JwtService from "../services/jwt.service";
+
+import User from "../models/User";
 
 let loginController = {
   login: async (req, res, next) => {
@@ -27,7 +31,7 @@ let loginController = {
 
       const token = JwtService.jwtSign(user.id);
 
-      return res.status(200).json({ user, token });
+      return res.status(StatusCodes.OK).json({ user, token });
     } catch (error) {
       next(error);
     }
@@ -37,7 +41,7 @@ let loginController = {
     try {
       JwtService.jwtBlacklistToken(JwtService.jwtGetToken(req));
 
-      res.status(200).json({ msg: "Authorized" });
+      res.status(StatusCodes.OK).json({ msg: "Authorized" });
     } catch (error) {
       next(error);
     }

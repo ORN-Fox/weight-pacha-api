@@ -1,6 +1,9 @@
+import { StatusCodes } from 'http-status-codes';
 import * as Yup from "yup";
-import Address from "../models/Address";
+
 import { BadRequestError, ValidationError } from "../utils/ApiError";
+
+import Address from "../models/Address";
 
 let addressController = {
   add: async (req, res, next) => {
@@ -22,7 +25,7 @@ let addressController = {
 
       const address = await Address.create(req.body);
 
-      return res.status(200).json(address);
+      return res.status(StatusCodes.OK).json(address);
     } catch (error) {
       next(error);
     }
