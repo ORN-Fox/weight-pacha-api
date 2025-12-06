@@ -1,55 +1,54 @@
-import { DataTypes } from "sequelize";
+"use strict";
 
-export function up(queryInterface, Sequelize) {
-  return queryInterface.createTable("UserSettings", {
-    id: {
-      type: DataTypes.UUID,
-      primaryKey: true,
-      allowNull: false,
-      defaultValue: DataTypes.UUIDV4,
-    },
-    locale: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    theme: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    calendarViewFormat: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    itemsPerPage: {
-      type: DataTypes.TINYINT,
-      allowNull: true,
-    },
-    weightUnit: {
-      type: DataTypes.TINYINT,
-      allowNull: true,
-    },
-    userId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      references: {
-        model: "Users",
-        key: "id",
+module.exports = {
+  up: (queryInterface, Sequelize) =>
+    queryInterface.createTable("UserSettings", {
+      id: {
+        type: Sequelize.UUID,
+        primaryKey: true,
+        allowNull: false,
+        defaultValue: Sequelize.UUIDV4,
       },
-      onDelete: "CASCADE",
-      onUpdate: "CASCADE",
-    },
-    createdAt: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: new Date(),
-    },
-    updatedAt: {
-      type: Sequelize.DATE,
-      allowNull: true,
-    },
-  });
-}
+      locale: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      theme: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      calendarViewFormat: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      itemsPerPage: {
+        type: Sequelize.TINYINT,
+        allowNull: true,
+      },
+      weightUnit: {
+        type: Sequelize.TINYINT,
+        allowNull: true,
+      },
+      userId: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {
+          model: "Users",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+      },
+      createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: new Date(),
+      },
+      updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: true,
+      },
+    }),
 
-export function down(queryInterface) {
-  return queryInterface.dropTable("UserSettings");
-}
+  down: (queryInterface) => queryInterface.dropTable("UserSettings"),
+};

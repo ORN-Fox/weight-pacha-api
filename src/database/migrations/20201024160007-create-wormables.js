@@ -1,51 +1,50 @@
-import { DataTypes } from "sequelize";
+"use strict";
 
-export function up(queryInterface, Sequelize) {
-  return queryInterface.createTable("Wormables", {
-    id: {
-      type: DataTypes.UUID,
-      primaryKey: true,
-      allowNull: false,
-      defaultValue: DataTypes.UUIDV4,
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    injectionDate: {
-      type: DataTypes.DATE,
-      allowNull: true,
-    },
-    reminderDate: {
-      type: DataTypes.DATE,
-      allowNull: true,
-    },
-    description: {
-      type: DataTypes.STRING(2000),
-      allowNull: true,
-    },
-    petRecordId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      references: {
-        model: "PetRecords",
-        key: "id",
+module.exports = {
+  up: (queryInterface, Sequelize) =>
+    queryInterface.createTable("Wormables", {
+      id: {
+        type: Sequelize.UUID,
+        primaryKey: true,
+        allowNull: false,
+        defaultValue: Sequelize.UUIDV4,
       },
-      onDelete: "CASCADE",
-      onUpdate: "CASCADE",
-    },
-    createdAt: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: new Date(),
-    },
-    updatedAt: {
-      type: Sequelize.DATE,
-      allowNull: true,
-    },
-  });
-}
+      name: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      injectionDate: {
+        type: Sequelize.DATE,
+        allowNull: true,
+      },
+      reminderDate: {
+        type: Sequelize.DATE,
+        allowNull: true,
+      },
+      description: {
+        type: Sequelize.STRING(2000),
+        allowNull: true,
+      },
+      petRecordId: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {
+          model: "PetRecords",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+      },
+      createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: new Date(),
+      },
+      updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: true,
+      },
+    }),
 
-export function down(queryInterface) {
-  return queryInterface.dropTable("Wormables");
-}
+  down: (queryInterface) => queryInterface.dropTable("Wormables"),
+};

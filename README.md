@@ -60,20 +60,22 @@ Variables for the environment
 
 ```bash
 # Creates the database
-yarn sequelize db:create
+sequelize db:create --env <env>
 
 # Drops the database
-yarn sequelize db:drop
+sequelize db:drop
 
 # Load migrations
-yarn sequelize db:migrate
+sequelize db:migrate
 
 # Undo migrations
-yarn sequelize db:migrate:undo:all
+sequelize db:migrate:undo:all
 
 # Load seeders
-yarn sequelize db:seed:all
+sequelize db:seed:all
 ```
+
+Use `--debug` in command for display debug log
 
 ## Contributing
 
