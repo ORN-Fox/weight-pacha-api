@@ -54,9 +54,6 @@ Variables for the environment
 | DB_USER            | Database username           |
 | DB_PASS            | Database password           |
 | DB_NAME            | Database name               |
-| AWS_KEYID          | Access key ID               |
-| AWS_SECRETKEY      | User secret key             |
-| AWS_BUCKET         | Bucket name                 |
 
 ## Commands for sequelize
 
