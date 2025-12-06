@@ -4,10 +4,22 @@ import moment from "moment";
 let jwtidCounter = 0;
 let blacklist = [];
 
-const JwtService = {
+const jwtService = {
+  init: async () => {
+    try {
+      if (process.env.SERVER_JWT_ENABLED !== "true")
+        throw new Error("[JWT] JWT is not enabled");
+
+      console.log("[JWT] JWT service initialized");
+    } catch (error) {
+      console.log("[JWT] Error during JWT service initialization");
+      throw error;
+    }
+  },
+
   jwtSign: (_payload) => {
     try {
-      if (process.env.SERVER_JWT !== "true")
+      if (process.env.SERVER_JWT_ENABLED !== "true")
         throw new Error("[JWT] Fastify JWT flag is not setted");
 
       console.log("[JWT] Generating fastify JWT sign");
@@ -92,4 +104,4 @@ const JwtService = {
   },
 };
 
-export default JwtService;
+export default jwtService;
