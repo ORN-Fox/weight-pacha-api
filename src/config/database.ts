@@ -1,0 +1,54 @@
+import dotenv from "dotenv";
+import { Options } from "sequelize";
+
+dotenv.config();
+
+interface DatabaseConfig {
+  development: Options;
+  test: Options;
+  production: Options;
+}
+
+const databaseConfig: DatabaseConfig = {
+  development: {
+    dialect: process.env.DB_DIALECT as any,
+    host: process.env.DB_HOST,
+    port: parseInt(process.env.DB_PORT || "3306"),
+    database: process.env.DB_NAME,
+    username: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    dialectOptions: {
+      bigNumberStrings: true,
+    },
+    define: {
+      timestamps: true,
+    },
+  },
+  test: {
+    dialect: process.env.DB_DIALECT as any,
+    host: process.env.DB_HOST,
+    port: parseInt(process.env.DB_PORT || "3306"),
+    database: process.env.DB_NAME,
+    username: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    define: {
+      timestamps: true,
+    },
+  },
+  production: {
+    dialect: process.env.DB_DIALECT as any,
+    host: process.env.DB_HOST,
+    port: parseInt(process.env.DB_PORT || "3306"),
+    database: process.env.DB_NAME,
+    username: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    dialectOptions: {
+      bigNumberStrings: true,
+    },
+    define: {
+      timestamps: true,
+    },
+  },
+};
+
+export default databaseConfig;
