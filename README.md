@@ -16,7 +16,7 @@ git clone https://github.com/ORN_Fox/weight-pacha-api.git
 Enter into the directory
 
 ```bash
-cd express-sequelize-boilerplate/
+cd weight-pacha-api/
 ```
 
 Install the sequelize-cli and dependencies
@@ -42,18 +42,18 @@ npm run dev
 
 Variables for the environment
 
-| Option             | Description                 |
-| ------------------ | --------------------------- |
-| SERVER_PORT        | Port the server will run on |
-| SERVER_JWT         | true or false               |
-| SERVER_JWT_SECRET  | JWT secret                  |
-| SERVER_JWT_TIMEOUT | JWT duration time           |
-| DB_DIALECT         | "mysql", among others       |
-| DB_HOST            | Database host               |
-| DB_USER            | Database username           |
-| DB_PASS            | Database password           |
-| DB_NAME            | Database name               |
+| Option             | Description                       |
+| ------------------ | --------------------------------- |
+| SERVER_PORT        | Port the server will run on       |
 | NODE_ENV           | development, test or production   |
+| SERVER_JWT         | true or false                     |
+| SERVER_JWT_SECRET  | JWT secret                        |
+| SERVER_JWT_TIMEOUT | JWT duration time                 |
+| DB_DIALECT         | "mysql", among others             |
+| DB_HOST            | Database host                     |
+| DB_USER            | Database username                 |
+| DB_PASS            | Database password                 |
+| DB_NAME            | Database name                     |
 
 ## Commands for sequelize
 
