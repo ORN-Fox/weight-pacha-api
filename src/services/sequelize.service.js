@@ -10,7 +10,6 @@ const sequelizeService = {
   init: async () => {
     try {
       const environment = process.env.NODE_ENV || "development";
-      console.log("env", environment);
       const config = databaseConfig[environment];
 
       let connection = new Sequelize(config);
