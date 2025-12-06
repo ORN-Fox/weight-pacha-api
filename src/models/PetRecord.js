@@ -4,9 +4,22 @@ class PetRecord extends Model {
   static init(sequelize) {
     super.init(
       {
-        firstName: Sequelize.STRING(100),
-        lastName: Sequelize.STRING(100),
-        specie: Sequelize.TINYINT,
+        id: {
+          type: Sequelize.UUIDV4,
+          primaryKey: true
+        },   
+        firstName: {
+          type: Sequelize.STRING(100),
+          allowNull: false
+        },
+        lastName: {
+          type: Sequelize.STRING(100),
+          allowNull: false
+        },
+        specie: {
+          type: Sequelize.TINYINT,
+          allowNull: false,
+        },
         breed: Sequelize.STRING(50),
         sex: Sequelize.TINYINT,
         color: Sequelize.STRING(50),
@@ -15,18 +28,32 @@ class PetRecord extends Model {
         sequelizeDate: Sequelize.DATE,
         tagNumber: Sequelize.STRING(50),
         tagRageNumber: Sequelize.STRING(50),
-        description: Sequelize.STRING,
+        description: Sequelize.TEXT("long")
       },
       {
         sequelize,
         timestamps: true,
+        freezeTableName: false, //If it's false, it will use the table name in the plural. Ex: Users
+        tableName: 'PetRecords' //Define table name
       }
     );
 
     return this;
   }
 
-  // TODO user relation
+  static associate(models) {
+    this.belongsToMany(models.User, {
+      through: "UserPetRecord",
+      foreignKey: "petRecordId",
+    });
+
+    this.hasMany(models.CalendarEvent, { foreignKey: "petRecordId" });
+    this.hasMany(models.Invoice, { foreignKey: "petRecordId" });
+    this.hasMany(models.Measure, { foreignKey: "petRecordId" });
+    this.hasMany(models.Note, { foreignKey: "petRecordId" });
+    this.hasMany(models.Vaccine, { foreignKey: "petRecordId" });
+    this.hasMany(models.Wormable, { foreignKey: "petRecordId" });
+  }
 }
 
 export default PetRecord;

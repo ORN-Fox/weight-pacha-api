@@ -4,6 +4,10 @@ class Address extends Model {
   static init(sequelize) {
     super.init(
       {
+        id: {
+          type: Sequelize.UUIDV4,
+          primaryKey: true
+        },
         city: Sequelize.STRING,
         state: Sequelize.STRING,
         neighborhood: Sequelize.STRING,

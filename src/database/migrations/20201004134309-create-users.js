@@ -8,8 +8,9 @@ export function up(queryInterface, Sequelize) {
       allowNull: false,
       defaultValue: sql.uuidV4,
     },
-    name: {
+    username: {
       type: Sequelize.STRING,
+      unique: true,
       allowNull: false,
     },
     email: {
