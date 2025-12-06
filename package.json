@@ -22,6 +22,7 @@
     "yup": "^1.0.0"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "nodemon": "^2.0.18",
     "sequelize-cli": "^6.4.1",
     "sucrase": "^3.23.0"
