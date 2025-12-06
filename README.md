@@ -46,9 +46,9 @@ Variables for the environment
 | ------------------ | --------------------------------- |
 | SERVER_PORT        | Port the server will run on       |
 | NODE_ENV           | development, test or production   |
-| SERVER_JWT         | true or false                     |
+| SERVER_JWT_ENABLED | true or false                     |
 | SERVER_JWT_SECRET  | JWT secret                        |
-| SERVER_JWT_TIMEOUT | JWT duration time                 |
+| SERVER_JWT_TIMEOUT | JWT duration time in ms           |
 | DB_DIALECT         | "mysql", among others             |
 | DB_HOST            | Database host                     |
 | DB_PORT            | Database port                     |
