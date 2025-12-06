@@ -19,9 +19,10 @@ Enter into the directory
 cd express-sequelize-boilerplate/
 ```
 
-Install the dependencies
+Install the sequelize-cli and dependencies
 
 ```bash
+npm install -g sequelize-cli
 npm install
 ```
 
