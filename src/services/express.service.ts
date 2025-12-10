@@ -40,7 +40,10 @@ const expressService: ExpressService = {
         server.use(route);
       });
       server.use(globalErrorHandler);
-      server.listen(process.env.SERVER_PORT);
+      const port = process.env.SERVER_PORT || 3000;
+      server.listen(port, () => {
+        console.log(`[EXPRESS] Server listening on port ${port}`);
+      });
       console.log("[EXPRESS] Express initialized");
     } catch (error) {
       console.log("[EXPRESS] Error during express service initialization");
