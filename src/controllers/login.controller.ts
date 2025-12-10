@@ -35,9 +35,14 @@ const loginController = {
 
       if (!(await user.checkPassword(password))) throw new UnauthorizedError();
 
-      const token = jwtService.jwtSign({ id: user.id });
+      const accessToken = jwtService.jwtSign({ id: user.id });
+      const refreshToken = jwtService.jwtSignRefresh({ id: user.id, type: 'refresh' });
 
-      return res.status(StatusCodes.OK).json({ user, token });
+      return res.status(StatusCodes.OK).json({
+        user,
+        accessToken,
+        refreshToken
+      });
     } catch (error) {
       next(error);
     }
