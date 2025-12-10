@@ -52,6 +52,31 @@ const jwtService = {
     }
   },
 
+  jwtSignRefresh: (_payload: Record<string, any>): string => {
+    try {
+      if (process.env.SERVER_JWT_ENABLED !== "true")
+        throw new Error("[JWT] Fastify JWT flag is not setted");
+
+      console.log("[JWT] Generating fastify JWT refresh sign");
+
+      const payload = JSON.parse(JSON.stringify(_payload));
+
+      jwtidCounter = jwtidCounter + 1;
+      // Durée longue pour le refreshToken (ex: 7 jours)
+      return jwt.sign(
+        { payload },
+        process.env.SERVER_JWT_SECRET as string,
+        {
+          expiresIn: 60 * 60 * 24 * 7, // 7 jours
+          jwtid: jwtidCounter.toString(),
+        }
+      );
+    } catch (error) {
+      console.log("[JWT] Error during fastify JWT refresh sign");
+      throw error;
+    }
+  },
+
   jwtGetToken: (request: Request): string => {
     try {
       if (process.env.SERVER_JWT_ENABLED !== "true")
