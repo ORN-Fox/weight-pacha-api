@@ -2,7 +2,7 @@ import express, { Express, Router } from "express";
 import fs from "fs";
 import bodyParser from "body-parser";
 import globalErrorHandler from "../middlewares/errorHandler.middleware.js";
-import { fileURLToPath } from "url";
+import { fileURLToPath, pathToFileURL } from "url";
 import { dirname } from "path";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -13,8 +13,11 @@ const __dirname = dirname(__filename);
   available under the req.body property.
 */
 
+const routesDir = process.env.NODE_ENV === "production"
+  ? __dirname + "/../../dist/routes/"
+  : __dirname + "/../routes/";
 const routeFiles = fs
-  .readdirSync(__dirname + "/../routes/")
+  .readdirSync(routesDir)
   .filter((file) => file.endsWith(".js"));
 
 let server: Express;
@@ -29,7 +32,9 @@ const expressService: ExpressService = {
     try {
       // Loading routes automatically
       for (const file of routeFiles) {
-        const route = await import(`../routes/${file}`);
+        // Absolute path to convert to ESIM-compatible URL
+        const routePath = pathToFileURL(routesDir + file).href;
+        const route = await import(routePath);
         const routeName = Object.keys(route)[0];
         routes.push(route[routeName]);
       }
