@@ -26,9 +26,7 @@ class Wormable extends Model<any> {
       },
       {
         sequelize,
-        timestamps: true,
-        freezeTableName: false,
-        tableName: "Wormables",
+        timestamps: true
       }
     );
 

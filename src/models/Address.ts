@@ -24,9 +24,7 @@ class Address extends Model<any> {
       },
       {
         sequelize,
-        timestamps: true,
-        freezeTableName: false,
-        tableName: "Addresses",
+        timestamps: true
       }
     );
 

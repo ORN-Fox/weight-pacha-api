@@ -16,7 +16,7 @@ class UserAddress extends Model<any> {
       {
         sequelize,
         timestamps: true,
-        tableName: "UserAddress",
+        freezeTableName: true
       }
     );
 

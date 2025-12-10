@@ -22,9 +22,7 @@ class Measure extends Model<any> {
       },
       {
         sequelize,
-        timestamps: true,
-        freezeTableName: false,
-        tableName: "Measures",
+        timestamps: true
       }
     );
 

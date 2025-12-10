@@ -22,9 +22,7 @@ class Note extends Model<any> {
       },
       {
         sequelize,
-        timestamps: true,
-        freezeTableName: false,
-        tableName: "Notes",
+        timestamps: true
       }
     );
 

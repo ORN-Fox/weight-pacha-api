@@ -49,9 +49,7 @@ class PetRecord extends Model<any> {
       },
       {
         sequelize,
-        timestamps: true,
-        freezeTableName: false,
-        tableName: "PetRecords",
+        timestamps: true
       }
     );
 

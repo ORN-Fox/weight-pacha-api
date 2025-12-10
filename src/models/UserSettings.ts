@@ -28,9 +28,7 @@ class UserSettings extends Model<any> {
       },
       {
         sequelize,
-        timestamps: true,
-        freezeTableName: false,
-        tableName: "UserSettings",
+        timestamps: true
       }
     );
 

@@ -24,9 +24,7 @@ class CalendarEvent extends Model<any> {
       },
       {
         sequelize,
-        timestamps: true,
-        freezeTableName: false,
-        tableName: "CalendarEvents",
+        timestamps: true
       }
     );
 

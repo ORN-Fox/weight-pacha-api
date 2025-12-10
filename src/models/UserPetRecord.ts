@@ -16,7 +16,7 @@ class UserPetRecord extends Model<any> {
       {
         sequelize,
         timestamps: true,
-        tableName: "UserPetRecord",
+        freezeTableName: true
       }
     );
 

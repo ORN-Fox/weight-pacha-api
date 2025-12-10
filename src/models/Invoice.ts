@@ -24,9 +24,7 @@ class Invoice extends Model<any> {
       },
       {
         sequelize,
-        timestamps: true,
-        freezeTableName: false,
-        tableName: "Invoices",
+        timestamps: true
       }
     );
 

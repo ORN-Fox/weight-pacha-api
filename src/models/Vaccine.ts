@@ -26,9 +26,7 @@ class Vaccine extends Model<any> {
       },
       {
         sequelize,
-        timestamps: true,
-        freezeTableName: false,
-        tableName: "Vaccines",
+        timestamps: true
       }
     );
 

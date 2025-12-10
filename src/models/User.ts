@@ -29,9 +29,7 @@ class User extends Model<any> {
       },
       {
         sequelize,
-        timestamps: true,
-        freezeTableName: false,
-        tableName: "Users",
+        timestamps: true
       }
     );
 
