@@ -48,14 +48,15 @@ const loginController = {
     }
   }) as RequestHandler,
 
-  logout: (async (req: Request, res: Response, next: NextFunction) => {
+  logout: (async (req: Request, res: Response) => {
     try {
       const token = jwtService.jwtGetToken(req);
       jwtService.jwtBlacklistToken(token);
 
       res.status(StatusCodes.OK).json({ msg: "Authorized" });
     } catch (error) {
-      next(error);
+      // Sending always 200 for prevent refresh infinite loop
+      res.status(StatusCodes.OK).json({ msg: "Authorized" });
     }
   }) as RequestHandler,
 };
