@@ -54,8 +54,9 @@ const jwtService = {
 
   jwtGetToken: (request: Request): string => {
     try {
-      if (process.env.SERVER_JWT !== "true")
+      if (process.env.SERVER_JWT_ENABLED !== "true")
         throw new Error("[JWT] JWT flag is not setted");
+      
       if (
         !request.headers.authorization ||
         request.headers.authorization.split(" ")[0] !== "Bearer"
@@ -71,7 +72,7 @@ const jwtService = {
 
   jwtVerify: (token: string): Record<string, any> => {
     try {
-      if (process.env.SERVER_JWT !== "true")
+      if (process.env.SERVER_JWT_ENABLED !== "true")
         throw new Error("[JWT] JWT flag is not setted");
 
       return new Promise((resolve, reject) => {
@@ -92,7 +93,6 @@ const jwtService = {
                 reject(err);
             });
 
-            console.log(decodedPayload);
             resolve(decodedPayload.payload);
           }
         );
