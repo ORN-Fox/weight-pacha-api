@@ -10,9 +10,9 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "tsx watch src/index.ts",
-    "db:migrate": "npm run build && sequelize db:migrate",
-    "db:migrate:undo": "npm run build && sequelize db:migrate:undo",
-    "db:seed:all": "npm run build && sequelize db:seed:all",
+    "db:migrate": "sequelize db:migrate",
+    "db:migrate:undo": "sequelize db:migrate:undo",
+    "db:seed:all": "sequelize db:seed:all",
     "lint": "tsc --noEmit",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist"
