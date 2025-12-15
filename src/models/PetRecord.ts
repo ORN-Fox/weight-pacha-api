@@ -22,17 +22,15 @@ class PetRecord extends Model<any> {
     super.init(
       {
         id: {
-          type: DataTypes.UUIDV4,
+          type: DataTypes.UUID,
           primaryKey: true,
+          defaultValue: DataTypes.UUIDV4,
         },
         firstName: {
           type: DataTypes.STRING(100),
           allowNull: false,
         },
-        lastName: {
-          type: DataTypes.STRING(100),
-          allowNull: false,
-        },
+        lastName: DataTypes.STRING(100),
         specie: {
           type: DataTypes.TINYINT,
           allowNull: false,
