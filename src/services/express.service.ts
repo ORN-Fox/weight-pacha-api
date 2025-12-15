@@ -1,6 +1,7 @@
 import express, { Express, Router } from "express";
 import fs from "fs";
 import bodyParser from "body-parser";
+import cors from "cors";
 import globalErrorHandler from "../middlewares/errorHandler.middleware.js";
 import { fileURLToPath, pathToFileURL } from "url";
 import { dirname } from "path";
@@ -23,6 +24,14 @@ const routeFiles = fs
 let server: Express;
 let routes: Router[] = [];
 
+const corsOptions = {
+    origin: '*', // TODO replace by valid origin for restrict access (security)
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+    optionsSuccessStatus: 204,
+    allowedHeaders: 'Content-Type, Authorization, Content-Length',
+};
+
 interface ExpressService {
   init: () => Promise<void>;
 }
@@ -41,10 +50,15 @@ const expressService: ExpressService = {
 
       server = express();
       server.use(bodyParser.json());
+      server.use((cors as (options: cors.CorsOptions) => express.RequestHandler)(corsOptions));      
+      server.options('*', (cors as (options: cors.CorsOptions) => express.RequestHandler)(corsOptions));
+
       routes.forEach((route) => {
         server.use(route);
       });
+
       server.use(globalErrorHandler);
+
       const port = process.env.SERVER_PORT || 3000;
       server.listen(port, () => {
         console.log(`[EXPRESS] Server listening on port ${port}`);

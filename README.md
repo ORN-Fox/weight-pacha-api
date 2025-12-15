@@ -46,6 +46,7 @@ Variables for the environment
 | ----------------------| --------------------------------- |
 | SERVER_PORT           | Port the server will run on       |
 | NODE_ENV              | development, test or production   |
+| CLIENT_BASE_URL       | localhost or custom domain        |
 | SERVER_JWT_ENABLED    | true or false                     |
 | SERVER_JWT_SECRET     | JWT secret                        |
 | SERVER_JWT_TIMEOUT    | JWT duration time in ms           |
