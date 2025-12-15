@@ -1,15 +1,19 @@
 import { Sequelize } from "sequelize";
 import databaseConfig from "../config/database.js";
-import fs from "fs";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import Address from "../models/Address.js";
+import CalendarEvent from "../models/CalendarEvent.js";
+import Invoice from "../models/Invoice.js";
+import Measure from "../models/Measure.js";
+import Note from "../models/Note.js";
+import PetRecord from '../models/PetRecord.js';
+import User from '../models/User.js';
+import UserSettings from "../models/UserSettings.js";
+import Vaccine from "../models/Vaccine.js";
+import Wormable from "../models/Wormable.js";
 
-const modelFiles = fs
-  .readdirSync(__dirname + "/../models/")
-  .filter((file) => file.endsWith(".js"));
+import UserAddress from "../models/UserAddress.js";
+import UserPetRecord from '../models/UserPetRecord.js';
 
 let connection: Sequelize | null = null;
 
@@ -26,19 +30,33 @@ const sequelizeService: SequelizeService = {
 
       connection = new Sequelize(config);
 
-      // Loading models automatically
-      for (const file of modelFiles) {
-        const model = await import(`../models/${file}`);
-        model.default.init(connection);
-      }
+      // Loading models (reminder : keep order for support relationship correctly)
+      const models = {
+        User,
+        Address,
+        PetRecord,
+        UserPetRecord,
+        UserAddress,
+        UserSettings,
+        CalendarEvent,
+        Invoice,
+        Measure,
+        Note,
+        Vaccine,
+        Wormable,
+      };
 
-      // Associate models
-      for (const file of modelFiles) {
-        const model = await import(`../models/${file}`);
-        if (model.default.associate) {
-          model.default.associate(connection.models);
+      Object.values(models).forEach(model => {
+        if (typeof model.init === "function") {
+          model.init(connection as Sequelize);
         }
-      }
+      });
+
+      Object.values(models).forEach(model => {
+        if (typeof model.associate === 'function') {
+          model.associate(models);
+        }
+      });
 
       await connection.authenticate();
       console.log("[SEQUELIZE] Database connection authenticated");
