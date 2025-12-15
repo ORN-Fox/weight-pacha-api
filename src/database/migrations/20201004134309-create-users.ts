@@ -2,7 +2,7 @@
 
 import { QueryInterface, Sequelize } from "sequelize";
 
-module.exports = { up: async function(queryInterface: QueryInterface, Sequelize: typeof Sequelize): Promise<void> {
+export async function up(queryInterface: QueryInterface, Sequelize: typeof Sequelize): Promise<void> {
   return queryInterface.createTable("Users", {
     id: {
       type: Sequelize.UUID,
