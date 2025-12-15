@@ -10,8 +10,14 @@ class UserPetRecord extends Model<any> {
   static init(sequelize: Sequelize): typeof UserPetRecord {
     super.init(
       {
-        userId: DataTypes.UUIDV4,
-        petRecordId: DataTypes.UUIDV4,
+        userId: {
+          type: DataTypes.UUIDV4,
+          primaryKey: true,
+        },
+        petRecordId: {
+          type: DataTypes.UUIDV4,
+          primaryKey: true,
+        },
       },
       {
         sequelize,
