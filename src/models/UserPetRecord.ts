@@ -31,9 +31,9 @@ class UserPetRecord extends Model<any> {
 
   static associate(models: Record<string, any>): void {
     // @ts-ignore
-    this.belongsTo(models.User, { foreignKey: "userId" });
+    this.belongsTo(models.User, { foreignKey: "userId", as: "User" });
     // @ts-ignore
-    this.belongsTo(models.PetRecord, { foreignKey: "petRecordId" });
+    this.belongsTo(models.PetRecord, { foreignKey: "petRecordId", as: "PetRecord" });
   }
 }
 

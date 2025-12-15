@@ -51,29 +51,29 @@ class PetRecord extends Model<any> {
         timestamps: true
       }
     );
-
     return this;
   }
 
   static associate(models: Record<string, any>): void {
     // @ts-ignore
     this.belongsToMany(models.User, {
-      through: "UserPetRecord",
+      through: models.UserPetRecord,
       foreignKey: "petRecordId",
+      otherKey: "userId",
+      as: "Users"
     });
-
     // @ts-ignore
-    this.hasMany(models.CalendarEvent, { foreignKey: "petRecordId" });
+    this.hasMany(models.CalendarEvent, { foreignKey: "petRecordId", as: "CalendarEvents" });
     // @ts-ignore
-    this.hasMany(models.Invoice, { foreignKey: "petRecordId" });
+    this.hasMany(models.Invoice, { foreignKey: "petRecordId", as: "Invoices" });
     // @ts-ignore
-    this.hasMany(models.Measure, { foreignKey: "petRecordId" });
+    this.hasMany(models.Measure, { foreignKey: "petRecordId", as: "Measures" });
     // @ts-ignore
-    this.hasMany(models.Note, { foreignKey: "petRecordId" });
+    this.hasMany(models.Note, { foreignKey: "petRecordId", as: "Notes" });
     // @ts-ignore
-    this.hasMany(models.Vaccine, { foreignKey: "petRecordId" });
+    this.hasMany(models.Vaccine, { foreignKey: "petRecordId", as: "Vaccines" });
     // @ts-ignore
-    this.hasMany(models.Wormable, { foreignKey: "petRecordId" });
+    this.hasMany(models.Wormable, { foreignKey: "petRecordId", as: "Wormables" });
   }
 }
 

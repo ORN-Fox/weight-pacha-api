@@ -31,7 +31,7 @@ class Measure extends Model<any> {
 
   static associate(models: Record<string, any>): void {
     // @ts-ignore
-    this.hasOne(models.PetRecord, { foreignKey: "petRecordId" });
+    this.hasOne(models.PetRecord, { foreignKey: "id", as: "PetRecord" });
   }
 }
 

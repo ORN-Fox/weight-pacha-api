@@ -37,7 +37,7 @@ class UserSettings extends Model<any> {
 
   static associate(models: Record<string, any>): void {
     // @ts-ignore
-    this.hasOne(models.User, { foreignKey: "userId" });
+    this.belongsTo(models.User, { foreignKey: "userId", as: "User" });
   }
 }
 

@@ -45,14 +45,20 @@ class User extends Model<any> {
   static associate(models: Record<string, any>): void {
     // @ts-ignore
     this.belongsToMany(models.Address, {
-      through: "UserAddress",
+      through: models.UserAddress,
       foreignKey: "userId",
+      otherKey: "addressId",
+      as: "Addresses"
     });
     // @ts-ignore
     this.belongsToMany(models.PetRecord, {
-      through: "UserPetRecord",
+      through: models.UserPetRecord,
       foreignKey: "userId",
+      otherKey: "petRecordId",
+      as: "PetRecords"
     });
+    // @ts-ignore
+    this.hasOne(models.UserSettings, { foreignKey: "userId", as: "Settings" });
   }
 }
 

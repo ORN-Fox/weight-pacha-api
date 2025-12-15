@@ -34,8 +34,10 @@ class Address extends Model<any> {
   static associate(models: Record<string, any>): void {
     // @ts-ignore
     this.belongsToMany(models.User, {
-      through: "UserAddress",
+      through: models.UserAddress,
       foreignKey: "addressId",
+      otherKey: "userId",
+      as: "Users"
     });
   }
 }
