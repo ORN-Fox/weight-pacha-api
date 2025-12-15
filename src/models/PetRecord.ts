@@ -42,6 +42,8 @@ class PetRecord extends Model<any> {
         color: DataTypes.STRING(50),
         birthDate: DataTypes.DATE,
         adoptedDate: DataTypes.DATE,
+        sterilize: DataTypes.BOOLEAN,
+        sterilizeDate: DataTypes.DATE,
         tagNumber: DataTypes.STRING(50),
         tagRageNumber: DataTypes.STRING(50),
         description: DataTypes.TEXT("long"),
