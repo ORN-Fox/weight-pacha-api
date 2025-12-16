@@ -17,7 +17,7 @@ class Measure extends Model<any> {
           primaryKey: true,
         },
         date: DataTypes.DATE,
-        weight: DataTypes.INTEGER,
+        weight: DataTypes.FLOAT,
         petRecordId: DataTypes.UUIDV4,
       },
       {

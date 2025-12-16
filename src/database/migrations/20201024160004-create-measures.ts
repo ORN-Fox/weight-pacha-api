@@ -15,7 +15,7 @@ export async function up(queryInterface: QueryInterface, Sequelize: typeof Seque
       allowNull: true,
     },
     weight: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.FLOAT,
       allowNull: true,
     },
     petRecordId: {

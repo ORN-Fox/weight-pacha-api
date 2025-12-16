@@ -18,7 +18,7 @@ class Invoice extends Model<any> {
           primaryKey: true,
         },
         billingDate: DataTypes.DATE,
-        amount: DataTypes.INTEGER,
+        amount: DataTypes.FLOAT,
         description: DataTypes.STRING(2000),
         petRecordId: DataTypes.UUIDV4,
       },
