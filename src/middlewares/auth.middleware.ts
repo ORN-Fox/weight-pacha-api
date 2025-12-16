@@ -1,27 +1,24 @@
 import { Request, Response, NextFunction, RequestHandler } from "express";
-import jwtService from "../services/jwt.service.js";
+
 import { BadTokenError } from "../utils/ApiError.js";
 
-declare global {
-  namespace Express {
-    interface Request {
-      userId?: string;
-    }
-  }
-}
+import jwtService from "../services/jwt.service.js";
 
 const authMiddleware: RequestHandler = async (
   req: Request,
   _res: Response,
   next: NextFunction
-): Promise<void> => {
+) => {
   try {
     if (process.env.SERVER_JWT_ENABLED === "false") return next();
 
     const token = jwtService.jwtGetToken(req);
-    const decoded = jwtService.jwtVerify(token);
+    const decoded = await jwtService.jwtVerify(token);
 
-    // @ts-ignore
+    if (!decoded?.id) {
+      next(new BadTokenError());
+    }
+
     req.userId = decoded.id;
 
     return next();
