@@ -46,6 +46,7 @@ interface RequestWithUserId<
 //Yup is a JavaScript schema builder for value parsing and validation.
 
 const MIN_PASSWORD_LENGTH: number = parseInt(process.env.MIN_PASSWORD_LENGTH || "8");
+const MAX_PASSWORD_LENGTH: number = 128;
 
 const userController = {
 
@@ -54,7 +55,7 @@ const userController = {
       const schema = Yup.object().shape({
         name: Yup.string().required(),
         email: Yup.string().email().required(),
-        password: Yup.string().required().min(MIN_PASSWORD_LENGTH),
+        password: Yup.string().required().min(MIN_PASSWORD_LENGTH).max(MAX_PASSWORD_LENGTH),
       });
 
       if (!(await schema.isValid(req.body))) throw new ValidationError();
@@ -152,9 +153,10 @@ const userController = {
       const schema = Yup.object().shape({
         name: Yup.string(),
         email: Yup.string().email(),
-        oldPassword: Yup.string().min(MIN_PASSWORD_LENGTH),
+        oldPassword: Yup.string().min(MIN_PASSWORD_LENGTH).max(MAX_PASSWORD_LENGTH),
         password: Yup.string()
           .min(MIN_PASSWORD_LENGTH)
+          .max(MAX_PASSWORD_LENGTH)
           .when("oldPassword", (oldPassword, field) => {
             if (oldPassword) {
               return field.required();
