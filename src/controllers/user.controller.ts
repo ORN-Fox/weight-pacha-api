@@ -151,8 +151,8 @@ const userController = {
   ) => {
     try {
       const schema = Yup.object().shape({
-        name: Yup.string(),
-        email: Yup.string().email(),
+        name: Yup.string().required(),
+        email: Yup.string().email().required(),
         oldPassword: Yup.string().min(MIN_PASSWORD_LENGTH).max(MAX_PASSWORD_LENGTH),
         password: Yup.string()
           .min(MIN_PASSWORD_LENGTH)
