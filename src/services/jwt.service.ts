@@ -62,12 +62,12 @@ const jwtService = {
       const payload = JSON.parse(JSON.stringify(_payload));
 
       jwtidCounter = jwtidCounter + 1;
-      // Durée longue pour le refreshToken (ex: 7 jours)
+      // Long duration for the refreshToken (7 days)
       return jwt.sign(
         { payload },
         process.env.SERVER_JWT_SECRET as string,
         {
-          expiresIn: 60 * 60 * 24 * 7, // 7 jours
+          expiresIn: 60 * 60 * 24 * 7, // 7 days
           jwtid: jwtidCounter.toString(),
         }
       );
