@@ -120,17 +120,6 @@ const userController = {
     }
   }) as RequestHandler,
 
-  get: (async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      // @ts-ignore
-      const users = await User.findAll();
-
-      return res.status(StatusCodes.OK).json(users);
-    } catch (error) {
-      next(error);
-    }
-  }) as RequestHandler,
-
   find: (async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
