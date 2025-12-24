@@ -9,6 +9,7 @@ import {
 } from "../utils/ApiError.js";
 
 import Address from "../models/Address.js";
+import PetRecord from "../models/PetRecord.js";
 import User from "../models/User.js";
 
 interface CreateUserRequestBody {
@@ -134,7 +135,22 @@ const userController = {
     try {
       const { id } = req.params;
       // @ts-ignore
-      const user = await User.findByPk(id);
+      const user = await User.findByPk(id, {
+        include: [
+          {
+            model: PetRecord,
+            as: "PetRecords",
+            attributes: {
+              exclude: [
+                'breed',
+                'adoptedDate',
+                'tagNumber',
+                'description'
+              ]
+            }
+          }
+        ]
+      });
 
       if (!user) throw new BadRequestError();
 
