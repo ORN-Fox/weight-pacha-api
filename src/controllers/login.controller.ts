@@ -9,6 +9,8 @@ import {
 } from "../utils/ApiError.js";
 
 import jwtService from "../services/jwt.service.js";
+
+import PetRecord from "../models/PetRecord.js";
 import User from "../models/User.js";
 
 interface LoginRequestBody {
@@ -29,7 +31,23 @@ const loginController = {
       const { email, password } = req.body;
 
       // @ts-ignore
-      const user = await User.findOne({ where: { email } });
+      const user = await User.findOne({
+        where: { email: email },
+        include: [
+          {
+            model: PetRecord,
+            as: "PetRecords",
+            attributes: {
+              exclude: [
+                'breed',
+                'adoptedDate',
+                'tagNumber',
+                'description'
+              ]
+            }
+          }
+        ]
+      });
 
       if (!user) throw new BadRequestError();
 
