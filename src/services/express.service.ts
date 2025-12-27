@@ -55,6 +55,10 @@ const expressService: ExpressService = {
       routes.forEach((route) => {
         server.use(route);
       });
+      
+      server.get("/", (_req, res) => {
+        res.send("Hello World!");
+      });
 
       server.use(globalErrorHandler);
 
