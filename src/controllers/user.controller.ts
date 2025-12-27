@@ -8,9 +8,10 @@ import {
   ValidationError,
 } from "../utils/ApiError.js";
 
-import Address from "../models/Address.js";
-import PetRecord from "../models/PetRecord.js";
-import User from "../models/User.js";
+import Address from "@/models/Address";
+import PetRecord from "@/models/PetRecord";
+import User from "@/models/User";
+import UserSettings from "@/models/UserSettings";
 
 interface CreateUserRequestBody {
   name: string;
@@ -137,6 +138,10 @@ const userController = {
                 'description'
               ]
             }
+          },
+          {
+            model: UserSettings,
+            as: "Settings"
           }
         ]
       });

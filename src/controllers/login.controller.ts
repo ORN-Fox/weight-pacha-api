@@ -10,8 +10,9 @@ import {
 
 import jwtService from "../services/jwt.service.js";
 
-import PetRecord from "../models/PetRecord.js";
-import User from "../models/User.js";
+import PetRecord from "@/models/PetRecord";
+import User from "@/models/User";
+import UserSettings from "@/models/UserSettings";
 
 interface LoginRequestBody {
   email: string;
@@ -47,6 +48,10 @@ const loginController = {
                 'description'
               ]
             }
+          },
+          {
+            model: UserSettings,
+            as: "Settings"
           }
         ]
       });
