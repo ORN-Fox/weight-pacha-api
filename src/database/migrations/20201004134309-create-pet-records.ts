@@ -62,6 +62,10 @@ export async function up(queryInterface: QueryInterface, Sequelize: typeof Seque
       type: Sequelize.TEXT("long"),
       allowNull: true,
     },
+    archivedAt: {
+      type: Sequelize.DATE,
+      allowNull: true,
+    },
     createdAt: {
       type: Sequelize.DATE,
       allowNull: false,

@@ -45,6 +45,7 @@ class PetRecord extends Model<any> {
         tagNumber: DataTypes.STRING(50),
         tagRageNumber: DataTypes.STRING(50),
         description: DataTypes.TEXT("long"),
+        archivedAt: DataTypes.DATE
       },
       {
         sequelize,
