@@ -18,8 +18,7 @@ const routesDir = process.env.NODE_ENV === "production"
   ? __dirname + "/../../dist/routes/"
   : __dirname + "/../routes/";
 const routeFiles = fs
-  .readdirSync(routesDir)
-  .filter((file) => file.endsWith(".js"));
+  .readdirSync(routesDir);
 
 let server: Express;
 let routes: Router[] = [];
@@ -63,6 +62,7 @@ const expressService: ExpressService = {
       server.listen(port, () => {
         console.log(`[EXPRESS] Server listening on port ${port}`);
       });
+
       console.log("[EXPRESS] Express initialized");
     } catch (error) {
       console.log("[EXPRESS] Error during express service initialization");
