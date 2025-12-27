@@ -1,5 +1,7 @@
 import { Sequelize, Model, DataTypes } from "sequelize";
 
+import Vaccine from "./Vaccine";
+import Wormable from "./Wormable";
 
 export enum CalendarEventSource {
   CALENDAR = 0,
@@ -46,6 +48,32 @@ class CalendarEvent extends Model<any> {
   static associate(models: Record<string, any>): void {
     // @ts-ignore
     this.hasOne(models.PetRecord, { foreignKey: "id", as: "PetRecord" });
+  }
+
+  static convertVaccineToFullCalendarModel(vaccine: Vaccine) {
+    return {
+      id: vaccine.id,
+      title: vaccine.name,
+      startDate: vaccine.injectionDate,
+      description: vaccine.description,
+      eventSource: CalendarEventSource.VACCINE,
+      petRecordId: vaccine.petRecordId,
+      createdAt: vaccine.createdAt,
+      updatedAt: vaccine.updatedAt
+    }
+  }
+
+  static convertWormableToFullCalendarModel(wormable: Wormable) {
+    return {
+      id: wormable.id,
+      title: wormable.name,
+      startDate: wormable.injectionDate,
+      description: wormable.description,
+      eventSource: CalendarEventSource.WORMABLE,
+      petRecordId: wormable.petRecordId,
+      createdAt: wormable.createdAt,
+      updatedAt: wormable.updatedAt
+    }
   }
 }
 

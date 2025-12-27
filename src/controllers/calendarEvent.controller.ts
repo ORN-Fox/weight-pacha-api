@@ -8,6 +8,8 @@ import {
 } from "../utils/ApiError.js";
 
 import CalendarEvent from "../models/CalendarEvent.js";
+import Vaccine from "@/models/Vaccine";
+import Wormable from "@/models/Wormable.js";
 
 interface CreateCalendarEventRequestBody {
     title: string;
@@ -25,6 +27,8 @@ const calendarEventController = {
 
     findAllWithPetRecordId: (async (req: Request<{ petRecordId: string }>, res: Response, next: NextFunction) => {
         try {
+            let aggregateEvents: CalendarEvent[] = [];
+
             // @ts-ignore
             const calendarEvents = await CalendarEvent.findAll({
                 where: { petRecordId: req.params.petRecordId },
@@ -35,7 +39,35 @@ const calendarEventController = {
 
             if (!calendarEvents) throw new BadRequestError();
 
-            return res.status(StatusCodes.OK).json(calendarEvents);
+            aggregateEvents = aggregateEvents.concat(calendarEvents);
+
+            // @ts-ignore
+            const vaccines = await Vaccine.findAll({
+                where: { petRecordId: req.params.petRecordId },
+                order: [
+                    ['injectionDate', 'DESC']
+                ]
+            });
+
+            if (!vaccines) throw new BadRequestError();
+
+            let convertVaccines = vaccines.map(vaccine => CalendarEvent.convertVaccineToFullCalendarModel(vaccine));
+            aggregateEvents = aggregateEvents.concat(convertVaccines as CalendarEvent[]);
+
+            // @ts-ignore
+            const wormables = await Wormable.findAll({
+                where: { petRecordId: req.params.petRecordId },
+                order: [
+                    ['injectionDate', 'DESC']
+                ]
+            });
+
+            if (!wormables) throw new BadRequestError();
+
+            let convertWormables = wormables.map(wormable => CalendarEvent.convertWormableToFullCalendarModel(wormable));
+            aggregateEvents = aggregateEvents.concat(convertWormables as CalendarEvent[]);
+
+            return res.status(StatusCodes.OK).json(aggregateEvents);
         } catch (error) {
             next(error);
         }
