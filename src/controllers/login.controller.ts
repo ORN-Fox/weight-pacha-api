@@ -16,6 +16,7 @@ import User from "../models/User.js";
 interface LoginRequestBody {
   email: string;
   password: string;
+  rememberMe: boolean;
 }
 
 const loginController = {
@@ -24,11 +25,12 @@ const loginController = {
       const schema = Yup.object().shape({
         email: Yup.string().email().required(),
         password: Yup.string().required(),
+        rememberMe: Yup.boolean().default(false),
       });
 
       if (!(await schema.isValid(req.body))) throw new ValidationError();
 
-      const { email, password } = req.body;
+      const { email, password, rememberMe } = req.body;
 
       // @ts-ignore
       const user = await User.findOne({
