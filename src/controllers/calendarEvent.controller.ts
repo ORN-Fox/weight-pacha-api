@@ -7,7 +7,7 @@ import {
     ValidationError,
 } from "../utils/ApiError.js";
 
-import CalendarEvent from "../models/CalendarEvent.js";
+import CalendarEvent, { CalendarEventSource } from "@/models/CalendarEvent";
 import Vaccine from "@/models/Vaccine";
 import Wormable from "@/models/Wormable.js";
 
@@ -135,20 +135,35 @@ const calendarEventController = {
     }) as RequestHandler<{ petRecordId: string, calendarEventId: string }, {}, UpdateCalendarEventRequestBody>,
 
     delete: (async (
-        req: Request<{ petRecordId: string, calendarEventId: string }>,
+        req: Request<{ petRecordId: string, calendarEventId: string, eventSource: string }>,
         res: Response,
         next: NextFunction
     ) => {
         try {
-            // TODO handle vaccine and wormable event deletion (frontend 0.4.0)
-            // @ts-ignore
-            await CalendarEvent.destroy({ where: { id: req.params.calendarEventId } });
+            const eventSource = parseInt(req.params.eventSource);
+            
+            switch (eventSource) {
+                case CalendarEventSource.CALENDAR:
+                     // @ts-ignore
+                    await CalendarEvent.destroy({ where: { id: req.params.calendarEventId } });
+                    break;
+
+                case CalendarEventSource.VACCINE:
+                     // @ts-ignore
+                    await Vaccine.destroy({ where: { id: req.params.calendarEventId } });
+                    break;
+
+                case CalendarEventSource.WORMABLE:
+                     // @ts-ignore
+                    await Wormable.destroy({ where: { id: req.params.calendarEventId } });
+                    break;
+            }
 
             return res.status(StatusCodes.OK).json({ msg: "Deleted" });
         } catch (error) {
             next(error);
         }
-    }) as RequestHandler<{ petRecordId: string, calendarEventId: string }>,
+    }) as RequestHandler<{ petRecordId: string, calendarEventId: string, eventSource: string }>,
 
 };
 
