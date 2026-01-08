@@ -19,6 +19,4 @@ export default tseslint.config(
       },
     },
   },
-  // @ts-ignore
-  perfectionist.configs["recommended-natural"],
 );
