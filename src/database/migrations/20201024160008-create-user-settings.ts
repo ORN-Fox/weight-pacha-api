@@ -1,37 +1,37 @@
 "use strict";
 
-import { QueryInterface, Sequelize } from "sequelize";
+import { DataTypes, QueryInterface } from "sequelize";
 
-export async function up(queryInterface: QueryInterface, Sequelize: typeof Sequelize): Promise<void> {
+export async function up(queryInterface: QueryInterface): Promise<void> {
   return queryInterface.createTable("UserSettings", {
     id: {
-      type: Sequelize.UUID,
+      type: DataTypes.UUID,
       primaryKey: true,
       allowNull: false,
-      defaultValue: Sequelize.UUIDV4,
+      defaultValue: DataTypes.UUIDV4,
     },
     locale: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: true,
     },
     theme: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: true,
     },
     calendarViewFormat: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: true,
     },
     itemsPerPage: {
-      type: Sequelize.TINYINT,
+      type: DataTypes.TINYINT,
       allowNull: true,
     },
     weightUnit: {
-      type: Sequelize.TINYINT,
+      type: DataTypes.TINYINT,
       allowNull: true,
     },
     userId: {
-      type: Sequelize.UUID,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: "Users",
@@ -41,12 +41,12 @@ export async function up(queryInterface: QueryInterface, Sequelize: typeof Seque
       onUpdate: "CASCADE",
     },
     createdAt: {
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       allowNull: false,
       defaultValue: new Date(),
     },
     updatedAt: {
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       allowNull: true,
     },
   });

@@ -1,39 +1,39 @@
 "use strict";
 
-import { QueryInterface, Sequelize } from "sequelize";
+import { DataTypes, QueryInterface } from "sequelize";
 
-export async function up(queryInterface: QueryInterface, Sequelize: typeof Sequelize): Promise<void> {
+export async function up(queryInterface: QueryInterface): Promise<void> {
   return queryInterface.createTable("Addresses", {
     id: {
       allowNull: false,
       primaryKey: true,
-      type: Sequelize.UUID,
-      defaultValue: Sequelize.UUIDV4,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
     },
     city: {
       allowNull: false,
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
     },
     state: {
       allowNull: false,
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
     },
     neighborhood: {
       allowNull: false,
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
     },
     country: {
       allowNull: false,
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
     },
     createdAt: {
       allowNull: false,
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       defaultValue: new Date(),
     },
     updatedAt: {
       allowNull: false,
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       defaultValue: new Date(),
     },
   });

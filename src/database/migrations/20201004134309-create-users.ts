@@ -1,36 +1,36 @@
 "use strict";
 
-import { QueryInterface, Sequelize } from "sequelize";
+import { DataTypes, QueryInterface } from "sequelize";
 
-export async function up(queryInterface: QueryInterface, Sequelize: typeof Sequelize): Promise<void> {
+export async function up(queryInterface: QueryInterface): Promise<void> {
   return queryInterface.createTable("Users", {
     id: {
-      type: Sequelize.UUID,
+      type: DataTypes.UUID,
       primaryKey: true,
       allowNull: false,
-      defaultValue: Sequelize.UUIDV4,
+      defaultValue: DataTypes.UUIDV4,
     },
     username: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       unique: true,
       allowNull: false,
     },
     email: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       unique: true,
       allowNull: false,
     },
     password_hash: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     createdAt: {
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       allowNull: false,
       defaultValue: new Date(),
     },
     updatedAt: {
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       allowNull: true,
     },
   });

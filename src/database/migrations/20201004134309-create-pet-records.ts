@@ -1,78 +1,78 @@
 "use strict";
 
-import { QueryInterface, Sequelize } from "sequelize";
+import { DataTypes, QueryInterface } from "sequelize";
 
-export async function up(queryInterface: QueryInterface, Sequelize: typeof Sequelize): Promise<void> {
+export async function up(queryInterface: QueryInterface): Promise<void> {
   return queryInterface.createTable("PetRecords", {
     id: {
-      type: Sequelize.UUID,
+      type: DataTypes.UUID,
       primaryKey: true,
       allowNull: false,
-      defaultValue: Sequelize.UUIDV4,
+      defaultValue: DataTypes.UUIDV4,
     },
     firstName: {
-      type: Sequelize.STRING(100),
+      type: DataTypes.STRING(100),
       allowNull: false,
     },
     lastName: {
-      type: Sequelize.STRING(100),
+      type: DataTypes.STRING(100),
       allowNull: true,
     },
     specie: {
-      type: Sequelize.TINYINT,
+      type: DataTypes.TINYINT,
       allowNull: false,
     },
     breed: {
-      type: Sequelize.STRING(50),
+      type: DataTypes.STRING(50),
       allowNull: true,
     },
     sex: {
-      type: Sequelize.TINYINT,
+      type: DataTypes.TINYINT,
       allowNull: true,
     },
     color: {
-      type: Sequelize.STRING(50),
+      type: DataTypes.STRING(50),
       allowNull: true,
     },
     birthDate: {
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       allowNull: true,
     },
     adoptedDate: {
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       allowNull: true,
     },
     sterilize: {
-      type: Sequelize.BOOLEAN,
+      type: DataTypes.BOOLEAN,
       allowNull: true,
     },
     sterilizeDate: {
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       allowNull: true,
     },
     tagNumber: {
-      type: Sequelize.STRING(50),
+      type: DataTypes.STRING(50),
       allowNull: true,
     },
     tagRageNumber: {
-      type: Sequelize.STRING(50),
+      type: DataTypes.STRING(50),
       allowNull: true,
     },
     description: {
-      type: Sequelize.TEXT("long"),
+      type: DataTypes.TEXT("long"),
       allowNull: true,
     },
     archivedAt: {
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       allowNull: true,
     },
     createdAt: {
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       allowNull: false,
       defaultValue: new Date(),
     },
     updatedAt: {
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       allowNull: true,
     },
   });

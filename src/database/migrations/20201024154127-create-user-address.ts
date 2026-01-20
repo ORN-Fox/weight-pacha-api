@@ -1,11 +1,11 @@
 "use strict";
 
-import { QueryInterface, Sequelize } from "sequelize";
+import { DataTypes, QueryInterface } from "sequelize";
 
-export async function up(queryInterface: QueryInterface, Sequelize: typeof Sequelize): Promise<void> {
+export async function up(queryInterface: QueryInterface): Promise<void> {
   return queryInterface.createTable("UserAddress", {
     userId: {
-      type: Sequelize.UUID,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: "Users",
@@ -15,7 +15,7 @@ export async function up(queryInterface: QueryInterface, Sequelize: typeof Seque
       onUpdate: "CASCADE",
     },
     addressId: {
-      type: Sequelize.UUID,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: "Addresses",
@@ -26,12 +26,12 @@ export async function up(queryInterface: QueryInterface, Sequelize: typeof Seque
     },
     createdAt: {
       allowNull: false,
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       defaultValue: new Date(),
     },
     updatedAt: {
       allowNull: false,
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       defaultValue: new Date(),
     },
   });

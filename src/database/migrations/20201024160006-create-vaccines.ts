@@ -1,33 +1,33 @@
 "use strict";
 
-import { QueryInterface, Sequelize } from "sequelize";
+import { DataTypes, QueryInterface } from "sequelize";
 
-export async function up(queryInterface: QueryInterface, Sequelize: typeof Sequelize): Promise<void> {
+export async function up(queryInterface: QueryInterface): Promise<void> {
   return queryInterface.createTable("Vaccines", {
     id: {
-      type: Sequelize.UUID,
+      type: DataTypes.UUID,
       primaryKey: true,
       allowNull: false,
-      defaultValue: Sequelize.UUIDV4,
+      defaultValue: DataTypes.UUIDV4,
     },
     name: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: true,
     },
     injectionDate: {
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       allowNull: true,
     },
     reminderDate: {
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       allowNull: true,
     },
     description: {
-      type: Sequelize.STRING(2000),
+      type: DataTypes.STRING(2000),
       allowNull: true,
     },
     petRecordId: {
-      type: Sequelize.UUID,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: "PetRecords",
@@ -37,12 +37,12 @@ export async function up(queryInterface: QueryInterface, Sequelize: typeof Seque
       onUpdate: "CASCADE",
     },
     createdAt: {
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       allowNull: false,
       defaultValue: new Date(),
     },
     updatedAt: {
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       allowNull: true,
     },
   });
