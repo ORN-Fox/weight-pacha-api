@@ -2,8 +2,6 @@
 
 import { QueryInterface, Sequelize } from "sequelize";
 
-import { CalendarEventSource } from "../../models/CalendarEvent";
-
 export async function up(queryInterface: QueryInterface, Sequelize: typeof Sequelize): Promise<void> {
   return queryInterface.createTable("CalendarEvents", {
     id: {
@@ -23,10 +21,6 @@ export async function up(queryInterface: QueryInterface, Sequelize: typeof Seque
     description: {
       type: Sequelize.STRING(2000),
       allowNull: true,
-    },
-    eventSource: {
-      type: Sequelize.TINYINT,
-      defaultValue: CalendarEventSource.CALENDAR
     },
     petRecordId: {
       type: Sequelize.UUID,
