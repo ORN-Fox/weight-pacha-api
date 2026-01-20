@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import type { Options } from 'sequelize';
+import type { Dialect, Options } from "sequelize";
 
 dotenv.config();
 
@@ -13,9 +13,9 @@ interface DatabaseConfig {
 
 const databaseConfig: DatabaseConfig = {
   development: {
-    dialect: process.env.DB_DIALECT as any,
+    dialect: process.env.DB_DIALECT as Dialect,
     host: process.env.DB_HOST,
-    port: parseInt(process.env.DB_PORT || DEFAULT_BD_PORT),
+    port: parseInt(process.env.DB_PORT ?? DEFAULT_BD_PORT),
     database: process.env.DB_NAME,
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
@@ -27,9 +27,9 @@ const databaseConfig: DatabaseConfig = {
     },
   },
   test: {
-    dialect: process.env.DB_DIALECT as any,
+    dialect: process.env.DB_DIALECT as Dialect,
     host: process.env.DB_HOST,
-    port: parseInt(process.env.DB_PORT || DEFAULT_BD_PORT),
+    port: parseInt(process.env.DB_PORT ?? DEFAULT_BD_PORT),
     database: process.env.DB_NAME,
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
@@ -38,9 +38,9 @@ const databaseConfig: DatabaseConfig = {
     },
   },
   production: {
-    dialect: process.env.DB_DIALECT as any,
+    dialect: process.env.DB_DIALECT as Dialect,
     host: process.env.DB_HOST,
-    port: parseInt(process.env.DB_PORT || DEFAULT_BD_PORT),
+    port: parseInt(process.env.DB_PORT ?? DEFAULT_BD_PORT),
     database: process.env.DB_NAME,
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
