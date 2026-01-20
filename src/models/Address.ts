@@ -1,7 +1,7 @@
 import { Sequelize, Model, DataTypes } from "sequelize";
 
 // @ts-ignore
-class Address extends Model<any> {
+class Address extends Model {
   declare id: string;
   declare city: string;
   declare state: string;
@@ -24,20 +24,20 @@ class Address extends Model<any> {
       },
       {
         sequelize,
-        timestamps: true
-      }
+        timestamps: true,
+      },
     );
 
     return this;
   }
 
-  static associate(models: Record<string, any>): void {
+  static associate(models: Record<string, unknown>): void {
     // @ts-ignore
     this.belongsToMany(models.User, {
       through: models.UserAddress,
       foreignKey: "addressId",
       otherKey: "userId",
-      as: "Users"
+      as: "Users",
     });
   }
 }

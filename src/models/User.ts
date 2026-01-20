@@ -2,7 +2,7 @@ import { Sequelize, Model, DataTypes } from "sequelize";
 import bcrypt from "bcryptjs";
 
 // @ts-ignore
-class User extends Model<any> {
+class User extends Model {
   declare id: string;
   declare username: string;
   declare email: string;
@@ -29,8 +29,8 @@ class User extends Model<any> {
       },
       {
         sequelize,
-        timestamps: true
-      }
+        timestamps: true,
+      },
     );
 
     this.addHook("beforeSave", async (user: User) => {
@@ -42,20 +42,20 @@ class User extends Model<any> {
     return this;
   }
 
-  static associate(models: Record<string, any>): void {
+  static associate(models: Record<string, unknown>): void {
     // @ts-ignore
     this.belongsToMany(models.Address, {
       through: models.UserAddress,
       foreignKey: "userId",
       otherKey: "addressId",
-      as: "Addresses"
+      as: "Addresses",
     });
     // @ts-ignore
     this.belongsToMany(models.PetRecord, {
       through: models.UserPetRecord,
       foreignKey: "userId",
       otherKey: "petRecordId",
-      as: "PetRecords"
+      as: "PetRecords",
     });
     // @ts-ignore
     this.hasOne(models.UserSettings, { foreignKey: "userId", as: "Settings" });

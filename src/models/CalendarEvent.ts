@@ -6,11 +6,11 @@ import Wormable from "./Wormable";
 export enum CalendarEventSource {
   CALENDAR = 0,
   VACCINE,
-  WORMABLE
+  WORMABLE,
 }
 
 // @ts-ignore
-class CalendarEvent extends Model<any> {
+class CalendarEvent extends Model {
   declare id: string;
   declare title: string;
   declare startDate: Date;
@@ -30,22 +30,18 @@ class CalendarEvent extends Model<any> {
         title: DataTypes.STRING(),
         startDate: DataTypes.DATE,
         description: DataTypes.STRING(2000),
-        eventSource: {
-          type: DataTypes.TINYINT,
-          defaultValue: CalendarEventSource.CALENDAR
-        },
         petRecordId: DataTypes.UUIDV4,
       },
       {
         sequelize,
-        timestamps: true
-      }
+        timestamps: true,
+      },
     );
 
     return this;
   }
 
-  static associate(models: Record<string, any>): void {
+  static associate(models: Record<string, unknown>): void {
     // @ts-ignore
     this.hasOne(models.PetRecord, { foreignKey: "id", as: "PetRecord" });
   }
@@ -59,8 +55,8 @@ class CalendarEvent extends Model<any> {
       eventSource: CalendarEventSource.VACCINE,
       petRecordId: vaccine.petRecordId,
       createdAt: vaccine.createdAt,
-      updatedAt: vaccine.updatedAt
-    }
+      updatedAt: vaccine.updatedAt,
+    };
   }
 
   static convertWormableToFullCalendarModel(wormable: Wormable) {
@@ -72,8 +68,8 @@ class CalendarEvent extends Model<any> {
       eventSource: CalendarEventSource.WORMABLE,
       petRecordId: wormable.petRecordId,
       createdAt: wormable.createdAt,
-      updatedAt: wormable.updatedAt
-    }
+      updatedAt: wormable.updatedAt,
+    };
   }
 }
 

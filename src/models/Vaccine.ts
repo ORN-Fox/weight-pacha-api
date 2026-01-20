@@ -1,7 +1,7 @@
 import { Sequelize, Model, DataTypes } from "sequelize";
 
 // @ts-ignore
-class Vaccine extends Model<any> {
+class Vaccine extends Model {
   declare id: string;
   declare name: string;
   declare injectionDate: Date;
@@ -26,14 +26,14 @@ class Vaccine extends Model<any> {
       },
       {
         sequelize,
-        timestamps: true
-      }
+        timestamps: true,
+      },
     );
 
     return this;
   }
 
-  static associate(models: Record<string, any>): void {
+  static associate(models: Record<string, unknown>): void {
     // @ts-ignore
     this.hasOne(models.PetRecord, { foreignKey: "id", as: "PetRecord" });
   }

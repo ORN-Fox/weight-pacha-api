@@ -1,7 +1,7 @@
 import { Sequelize, Model, DataTypes } from "sequelize";
 
 // @ts-ignore
-class UserSettings extends Model<any> {
+class UserSettings extends Model {
   declare id: string;
   declare locale: string;
   declare theme: string;
@@ -28,14 +28,14 @@ class UserSettings extends Model<any> {
       },
       {
         sequelize,
-        timestamps: true
-      }
+        timestamps: true,
+      },
     );
 
     return this;
   }
 
-  static associate(models: Record<string, any>): void {
+  static associate(models: Record<string, unknown>): void {
     // @ts-ignore
     this.belongsTo(models.User, { foreignKey: "userId", as: "User" });
   }

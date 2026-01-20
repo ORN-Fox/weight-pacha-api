@@ -1,7 +1,7 @@
 import { Sequelize, Model, DataTypes } from "sequelize";
 
 // @ts-ignore
-class UserAddress extends Model<any> {
+class UserAddress extends Model {
   declare userId: string;
   declare addressId: string;
   declare readonly createdAt: Date;
@@ -16,14 +16,14 @@ class UserAddress extends Model<any> {
       {
         sequelize,
         timestamps: true,
-        freezeTableName: true
-      }
+        freezeTableName: true,
+      },
     );
 
     return this;
   }
 
-  static associate(models: Record<string, any>): void {
+  static associate(models: Record<string, unknown>): void {
     // @ts-ignore
     this.belongsTo(models.User, { foreignKey: "userId", as: "User" });
     // @ts-ignore

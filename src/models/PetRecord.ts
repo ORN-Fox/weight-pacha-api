@@ -1,7 +1,7 @@
 import { Sequelize, Model, DataTypes } from "sequelize";
 
 // @ts-ignore
-class PetRecord extends Model<any> {
+class PetRecord extends Model {
   declare id: string;
   declare firstName: string;
   declare lastName: string;
@@ -45,23 +45,23 @@ class PetRecord extends Model<any> {
         tagNumber: DataTypes.STRING(50),
         tagRageNumber: DataTypes.STRING(50),
         description: DataTypes.TEXT("long"),
-        archivedAt: DataTypes.DATE
+        archivedAt: DataTypes.DATE,
       },
       {
         sequelize,
-        timestamps: true
-      }
+        timestamps: true,
+      },
     );
     return this;
   }
 
-  static associate(models: Record<string, any>): void {
+  static associate(models: Record<string, unknown>): void {
     // @ts-ignore
     this.belongsToMany(models.User, {
       through: models.UserPetRecord,
       foreignKey: "petRecordId",
       otherKey: "userId",
-      as: "Users"
+      as: "Users",
     });
     // @ts-ignore
     this.hasMany(models.CalendarEvent, { foreignKey: "petRecordId", as: "CalendarEvents" });

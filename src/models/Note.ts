@@ -1,7 +1,7 @@
 import { Sequelize, Model, DataTypes } from "sequelize";
 
 // @ts-ignore
-class Note extends Model<any> {
+class Note extends Model {
   declare id: string;
   declare name: string;
   declare description: string;
@@ -22,14 +22,14 @@ class Note extends Model<any> {
       },
       {
         sequelize,
-        timestamps: true
-      }
+        timestamps: true,
+      },
     );
 
     return this;
   }
 
-  static associate(models: Record<string, any>): void {
+  static associate(models: Record<string, unknown>): void {
     // @ts-ignore
     this.hasOne(models.PetRecord, { foreignKey: "id", as: "PetRecord" });
   }
