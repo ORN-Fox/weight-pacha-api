@@ -2,11 +2,7 @@ import { Request, Response, NextFunction, RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
 import * as Yup from "yup";
 
-import {
-  BadRequestError,
-  UnauthorizedError,
-  ValidationError,
-} from "../utils/ApiError.js";
+import { UnauthorizedError, ValidationError } from "@/utils/ApiError.js";
 
 import Address from "@/models/Address";
 import PetRecord from "@/models/PetRecord";

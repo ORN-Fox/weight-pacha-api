@@ -2,12 +2,9 @@ import { Request, Response, NextFunction, RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
 import * as Yup from "yup";
 
-import {
-    BadRequestError,
-    ValidationError,
-} from "../utils/ApiError.js";
+import { ValidationError } from "@/utils/ApiError.js";
 
-import Note from "../models/Note.js";
+import Note from "@/models/Note.js";
 
 interface CreateNoteRequestBody {
     name: string;

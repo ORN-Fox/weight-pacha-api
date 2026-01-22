@@ -1,19 +1,19 @@
 import { Sequelize } from "sequelize";
-import databaseConfig from "../config/database.js";
+import databaseConfig from "@/config/database.js";
 
-import Address from "../models/Address.js";
-import CalendarEvent from "../models/CalendarEvent.js";
-import Invoice from "../models/Invoice.js";
-import Measure from "../models/Measure.js";
-import Note from "../models/Note.js";
-import PetRecord from '../models/PetRecord.js';
-import User from '../models/User.js';
-import UserSettings from "../models/UserSettings.js";
-import Vaccine from "../models/Vaccine.js";
-import Wormable from "../models/Wormable.js";
+import Address from "@/models/Address.js";
+import CalendarEvent from "@/models/CalendarEvent.js";
+import Invoice from "@/models/Invoice.js";
+import Measure from "@/models/Measure.js";
+import Note from "@/models/Note.js";
+import PetRecord from "@/models/PetRecord.js";
+import User from "@/models/User.js";
+import UserSettings from "@/models/UserSettings.js";
+import Vaccine from "@/models/Vaccine.js";
+import Wormable from "@/models/Wormable.js";
 
-import UserAddress from "../models/UserAddress.js";
-import UserPetRecord from '../models/UserPetRecord.js';
+import UserAddress from "@/models/UserAddress.js";
+import UserPetRecord from "@/models/UserPetRecord.js";
 
 let connection: Sequelize | null = null;
 
