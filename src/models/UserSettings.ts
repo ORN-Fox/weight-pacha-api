@@ -18,6 +18,7 @@ class UserSettings extends Model {
         id: {
           type: DataTypes.UUIDV4,
           primaryKey: true,
+          defaultValue: DataTypes.UUIDV4,
         },
         locale: DataTypes.STRING,
         theme: DataTypes.STRING,

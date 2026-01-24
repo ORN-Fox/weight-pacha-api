@@ -26,6 +26,7 @@ class CalendarEvent extends Model {
         id: {
           type: DataTypes.UUIDV4,
           primaryKey: true,
+          defaultValue: DataTypes.UUIDV4,
         },
         title: DataTypes.STRING(),
         startDate: DataTypes.DATE,

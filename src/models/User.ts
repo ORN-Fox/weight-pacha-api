@@ -21,6 +21,7 @@ class User extends Model {
         id: {
           type: DataTypes.UUIDV4,
           primaryKey: true,
+          defaultValue: DataTypes.UUIDV4,
         },
         username: DataTypes.STRING,
         email: DataTypes.STRING,

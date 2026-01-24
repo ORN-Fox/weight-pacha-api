@@ -17,6 +17,7 @@ class Wormable extends Model {
         id: {
           type: DataTypes.UUIDV4,
           primaryKey: true,
+          defaultValue: DataTypes.UUIDV4,
         },
         name: DataTypes.STRING,
         injectionDate: DataTypes.DATE,

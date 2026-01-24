@@ -15,6 +15,7 @@ class Note extends Model {
         id: {
           type: DataTypes.UUIDV4,
           primaryKey: true,
+          defaultValue: DataTypes.UUIDV4,
         },
         name: DataTypes.STRING,
         description: DataTypes.STRING(2000),

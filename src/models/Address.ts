@@ -16,6 +16,7 @@ class Address extends Model {
         id: {
           type: DataTypes.UUIDV4,
           primaryKey: true,
+          defaultValue: DataTypes.UUIDV4,
         },
         city: DataTypes.STRING,
         state: DataTypes.STRING,

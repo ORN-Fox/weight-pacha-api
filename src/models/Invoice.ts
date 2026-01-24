@@ -16,6 +16,7 @@ class Invoice extends Model {
         id: {
           type: DataTypes.UUIDV4,
           primaryKey: true,
+          defaultValue: DataTypes.UUIDV4,
         },
         billingDate: DataTypes.DATE,
         amount: DataTypes.FLOAT,

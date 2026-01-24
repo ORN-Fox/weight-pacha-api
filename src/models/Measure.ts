@@ -15,6 +15,7 @@ class Measure extends Model {
         id: {
           type: DataTypes.UUIDV4,
           primaryKey: true,
+          defaultValue: DataTypes.UUIDV4,
         },
         date: DataTypes.DATE,
         weight: DataTypes.FLOAT,
