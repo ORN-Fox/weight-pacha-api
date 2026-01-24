@@ -15,7 +15,7 @@ import Wormable from "@/models/Wormable.js";
 import UserAddress from "@/models/UserAddress.js";
 import UserPetRecord from "@/models/UserPetRecord.js";
 
-let connection: Sequelize | null = null;
+let connection: Sequelize;
 
 interface SequelizeService {
   init: () => Promise<void>;
@@ -25,7 +25,7 @@ interface SequelizeService {
 const sequelizeService: SequelizeService = {
   init: async (): Promise<void> => {
     try {
-      const environment = process.env.NODE_ENV || "development";
+      const environment = process.env.NODE_ENV ?? "development";
       const config = databaseConfig[environment as keyof typeof databaseConfig];
 
       connection = new Sequelize(config);
@@ -46,14 +46,14 @@ const sequelizeService: SequelizeService = {
         Wormable,
       };
 
-      Object.values(models).forEach(model => {
+      Object.values(models).forEach((model) => {
         if (typeof model.init === "function") {
-          model.init(connection as Sequelize);
+          model.init(connection);
         }
       });
 
-      Object.values(models).forEach(model => {
-        if (typeof model.associate === 'function') {
+      Object.values(models).forEach((model) => {
+        if (typeof model.associate === "function") {
           model.associate(models);
         }
       });
