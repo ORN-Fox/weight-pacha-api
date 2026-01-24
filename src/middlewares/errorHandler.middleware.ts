@@ -8,14 +8,10 @@ const currentEnv = process.env.NODE_ENV ?? "development";
 /**
  * Global error handler for all routes
  */
-export default (
-  err: Error,
-  _req: Request,
-  res: Response,
-  next: NextFunction
-): void => {
+export default (err: Error, _req: Request, res: Response, next: NextFunction): void => {
   if (res.headersSent) {
-    return next(err);
+    next(err);
+    return;
   }
 
   if (IsApiError(err)) {
