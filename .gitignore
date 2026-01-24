@@ -8,3 +8,4 @@
 
 # TypeScript build output
 /dist
+server.log
