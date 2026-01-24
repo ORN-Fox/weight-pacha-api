@@ -20,102 +20,83 @@ interface UpdateWormableRequestBody extends CreateWormableRequestBody {
 }
 
 const wormableController = {
+  findAllWithPetRecordId: (async (req: Request<{ petRecordId: string }>, res: Response, next: NextFunction) => {
+    try {
+      const { petRecordId } = req.params;
+      // @ts-ignore
+      const wormables = await Wormable.findAll({
+        where: { petRecordId: petRecordId },
+        order: [["injectionDate", "DESC"]],
+      });
 
-    findAllWithPetRecordId: (async (req: Request<{ petRecordId: string }>, res: Response, next: NextFunction) => {
-        try {
-            const { petRecordId } = req.params;
-            // @ts-ignore
-            const wormables = await Wormable.findAll({
-                where: { petRecordId: petRecordId },
-                order: [
-                    ['injectionDate', 'DESC']
-                ]
-            });
+      return res.status(StatusCodes.OK).json(wormables);
+    } catch (error) {
+      next(error);
+    }
+  }) as unknown as RequestHandler,
 
-            if (!wormables) throw new BadRequestError();
+  create: (async (req: Request<{ petRecordId: string }, object, CreateWormableRequestBody>, res: Response, next: NextFunction) => {
+    try {
+      const schema = Yup.object().shape({
+        name: Yup.string().required(),
+        injectionDate: Yup.date().required(),
+        reminderDate: Yup.date().nullable(),
+        description: Yup.string().nullable(),
+        petRecordId: Yup.string().required(),
+      });
 
-            return res.status(StatusCodes.OK).json(wormables);
-        } catch (error) {
-            next(error);
-        }
-    }) as unknown as RequestHandler,
+      if (!(await schema.isValid(req.body))) throw new ValidationError();
 
-    create: (async (
-        req: Request<{ petRecordId: string }, {}, CreateWormableRequestBody>, 
-        res: Response, 
-        next: NextFunction
-    ) => {
-        try {
-            const schema = Yup.object().shape({
-                name: Yup.string().required(),
-                injectionDate: Yup.date().required(),
-                reminderDate: Yup.date().nullable(),
-                description: Yup.string().nullable(),
-                petRecordId: Yup.string().required(),
-            });
+      // @ts-ignore
+      const wormable = await Wormable.create(req.body);
 
-            if (!(await schema.isValid(req.body))) throw new ValidationError();
+      return res.status(StatusCodes.OK).json(wormable);
+    } catch (error) {
+      next(error);
+    }
+  }) as RequestHandler<{ petRecordId: string }, object, CreateWormableRequestBody>,
 
-            // @ts-ignore
-            const wormable = await Wormable.create(req.body as any);
+  update: (async (
+    req: Request<{ petRecordId: string; wormableId: string }, object, UpdateWormableRequestBody>,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const schema = Yup.object().shape({
+        id: Yup.string().uuid().required(),
+        name: Yup.string().required(),
+        injectionDate: Yup.date().required(),
+        reminderDate: Yup.date().nullable(),
+        description: Yup.string().nullable(),
+        petRecordId: Yup.string().required(),
+        createdAt: Yup.date().required(),
+        updatedAt: Yup.date(),
+      });
 
-            return res.status(StatusCodes.OK).json(wormable);
-        } catch (error) {
-            next(error);
-        }
-    }) as RequestHandler<{ petRecordId: string }, {}, CreateWormableRequestBody>,
+      if (!(await schema.isValid(req.body))) throw new ValidationError();
 
-    update: (async (
-        req: Request<{ petRecordId: string, wormableId: string }, {}, UpdateWormableRequestBody>,
-        res: Response,
-        next: NextFunction
-    ) => {
-        try {
-            const schema = Yup.object().shape({
-                id: Yup.string().required(),
-                name: Yup.string().required(),
-                injectionDate: Yup.date().required(),
-                reminderDate: Yup.date().nullable(),
-                description: Yup.string().nullable(),
-                petRecordId: Yup.string().required(),
-                createdAt: Yup.date().required(),
-                updatedAt: Yup.date()
-            });
+      // @ts-ignore
+      await Wormable.update(req.body, { where: { id: req.params.wormableId } });
 
-            if (!(await schema.isValid(req.body))) throw new ValidationError();
+      // @ts-ignore
+      const updatedWormable = await Wormable.findByPk(req.params.wormableId);
 
-            // // @ts-ignore
-            // req.body.updatedAt = new Date();
+      return res.status(StatusCodes.OK).json(updatedWormable);
+    } catch (error) {
+      next(error);
+    }
+  }) as RequestHandler<{ petRecordId: string; wormableId: string }, object, UpdateWormableRequestBody>,
 
-            // @ts-ignore
-            await Wormable.update(req.body, { where: { id: req.params.wormableId } });
+  delete: (async (req: Request<{ petRecordId: string; wormableId: string }>, res: Response, next: NextFunction) => {
+    try {
+      // @ts-ignore
+      await Wormable.destroy({ where: { id: req.params.wormableId } });
 
-            // @ts-ignore
-            const updatedWormable = await Wormable.findByPk(req.params.wormableId);
-
-            if (!updatedWormable) throw new BadRequestError();
-
-            return res.status(StatusCodes.OK).json(updatedWormable);
-        } catch (error) {
-            next(error);
-        }
-    }) as RequestHandler<{ petRecordId: string, wormableId: string }, {}, UpdateWormableRequestBody>,
-
-    delete: (async (
-        req: Request<{ petRecordId: string, wormableId: string }>,
-        res: Response,
-        next: NextFunction
-    ) => {
-        try {
-            // @ts-ignore
-            await Wormable.destroy({ where: { id: req.params.wormableId } });
-
-            return res.status(StatusCodes.OK).json({ msg: "Deleted" });
-        } catch (error) {
-            next(error);
-        }
-    }) as RequestHandler<{ petRecordId: string, wormableId: string }>,
-
+      return res.status(StatusCodes.OK).json({ msg: "Deleted" });
+    } catch (error) {
+      next(error);
+    }
+  }) as RequestHandler<{ petRecordId: string; wormableId: string }>,
 };
 
 export default wormableController;

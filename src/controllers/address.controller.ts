@@ -14,7 +14,7 @@ interface AddressRequestBody {
 }
 
 const addressController = {
-  add: (async (req: Request<{}, {}, AddressRequestBody>, res: Response, next: NextFunction) => {
+  add: (async (req: Request<object, object, AddressRequestBody>, res: Response, next: NextFunction) => {
     try {
       const schema = Yup.object().shape({
         city: Yup.string().required(),
@@ -26,11 +26,9 @@ const addressController = {
       if (!(await schema.isValid(req.body))) throw new ValidationError();
 
       // @ts-ignore
-      const addressExists = await Address.findOne({
+      await Address.findOne({
         where: { ...req.body },
       });
-
-      if (addressExists) throw new BadRequestError();
 
       // @ts-ignore
       const address = await Address.create(req.body);

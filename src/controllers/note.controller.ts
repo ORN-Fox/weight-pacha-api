@@ -17,97 +17,74 @@ interface UpdateNoteRequestBody extends CreateNoteRequestBody {
 }
 
 const noteController = {
+  findAllWithPetRecordId: (async (req: Request<{ petRecordId: string }>, res: Response, next: NextFunction) => {
+    try {
+      const { petRecordId } = req.params;
 
-    findAllWithPetRecordId: (async (
-        req: Request<{ petRecordId: string }>, 
-        res: Response, 
-        next: NextFunction
-    ) => {
-        try {
-            const { petRecordId } = req.params;
+      // @ts-ignore
+      const measures = await Note.findAll({
+        where: { petRecordId: petRecordId },
+      });
 
-            // @ts-ignore
-            const measures = await Note.findAll({
-                where: { petRecordId: petRecordId }
-            });
+      return res.status(StatusCodes.OK).json(measures);
+    } catch (error) {
+      next(error);
+    }
+  }) as unknown as RequestHandler,
 
-            if (!measures) throw new BadRequestError();
+  create: (async (req: Request<object, object, CreateNoteRequestBody>, res: Response, next: NextFunction) => {
+    try {
+      const schema = Yup.object().shape({
+        name: Yup.string().required(),
+        description: Yup.string().nullable(),
+        petRecordId: Yup.string().required(),
+      });
 
-            return res.status(StatusCodes.OK).json(measures);
-        } catch (error) {
-            next(error);
-        }
-    }) as unknown as RequestHandler,
+      if (!(await schema.isValid(req.body))) throw new ValidationError();
 
-    create: (async (
-        req: Request<{}, {}, CreateNoteRequestBody>, 
-        res: Response, 
-        next: NextFunction
-    ) => {
-        try {
-            const schema = Yup.object().shape({
-                name: Yup.string().required(),
-                description: Yup.string().nullable(),
-                petRecordId: Yup.string().required(),
-            });
+      // @ts-ignore
+      const note = await Note.create(req.body);
 
-            if (!(await schema.isValid(req.body))) throw new ValidationError();
+      return res.status(StatusCodes.OK).json(note);
+    } catch (error) {
+      next(error);
+    }
+  }) as RequestHandler,
 
-            // @ts-ignore
-            const note = await Note.create(req.body as any);
+  update: (async (req: Request<{ noteId: string }, object, UpdateNoteRequestBody>, res: Response, next: NextFunction) => {
+    try {
+      const schema = Yup.object().shape({
+        id: Yup.string().uuid().required(),
+        name: Yup.string().required(),
+        description: Yup.string().nullable(),
+        petRecordId: Yup.string().required(),
+        createdAt: Yup.date().required(),
+      });
 
-            return res.status(StatusCodes.OK).json(note);
-        } catch (error) {
-            next(error);
-        }
-    }) as RequestHandler,
+      if (!(await schema.isValid(req.body))) throw new ValidationError();
 
-    update: (async (
-        req: Request<{ noteId: string }, {}, UpdateNoteRequestBody>, 
-        res: Response, 
-        next: NextFunction
-    ) => {
-        try {
-            const schema = Yup.object().shape({
-                name: Yup.string().required(),
-                description: Yup.string().nullable(),
-                petRecordId: Yup.string().required(),
-                createdAt: Yup.date().required()
-            });
+      // @ts-ignore
+      await Note.update(req.body, { where: { id: req.params.noteId } });
 
-            if (!(await schema.isValid(req.body))) throw new ValidationError();
+      // @ts-ignore
+      const updatedNote = await Note.findByPk(req.params.noteId);
 
-            // // @ts-ignore
-            // req.body.updatedAt = new Date();
+      return res.status(StatusCodes.OK).json(updatedNote);
+    } catch (error) {
+      next(error);
+    }
+  }) as RequestHandler<{ noteId: string }, object, UpdateNoteRequestBody>,
 
-            // @ts-ignore
-            await Note.update(req.body, { where: { id: req.params.noteId } });
+  delete: (async (req: Request<{ noteId: string }>, res: Response, next: NextFunction) => {
+    try {
+      // @ts-ignore
+      await Note.destroy({ where: { id: req.params.noteId } });
 
-            // @ts-ignore
-            const updatedNote = await Note.findByPk(req.params.noteId);
-
-            if (!updatedNote) throw new BadRequestError();
-
-            return res.status(StatusCodes.OK).json(updatedNote);
-        } catch (error) {
-            next(error);
-        }
-    }) as RequestHandler<{ noteId: string }, {}, UpdateNoteRequestBody>,
-
-    delete: (async (
-        req: Request<{ noteId: string }>, 
-        res: Response, 
-        next: NextFunction
-    ) => {
-        try {
-            // @ts-ignore
-            await Note.destroy({ where: { id: req.params.noteId } });
-
-            return res.status(StatusCodes.OK).json({ msg: "Deleted" });
-        } catch (error) {
-            next(error);
-        }
-    }) as RequestHandler<{ noteId: string }>,
+      return res.status(StatusCodes.OK).json({ msg: "Deleted" });
+    } catch (error) {
+      next(error);
+    }
+  }) as RequestHandler<{ noteId: string }>,
 };
 
 export default noteController;

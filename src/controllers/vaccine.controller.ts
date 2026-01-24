@@ -20,102 +20,79 @@ interface UpdateVaccineRequestBody extends CreateVaccineRequestBody {
 }
 
 const vaccineController = {
+  findAllWithPetRecordId: (async (req: Request<{ petRecordId: string }>, res: Response, next: NextFunction) => {
+    try {
+      const { petRecordId } = req.params;
+      // @ts-ignore
+      const vaccines = await Vaccine.findAll({
+        where: { petRecordId: petRecordId },
+        order: [["injectionDate", "DESC"]],
+      });
 
-    findAllWithPetRecordId: (async (req: Request<{ petRecordId: string }>, res: Response, next: NextFunction) => {
-        try {
-            const { petRecordId } = req.params;
-            // @ts-ignore
-            const vaccines = await Vaccine.findAll({
-                where: { petRecordId: petRecordId },
-                order: [
-                    ['injectionDate', 'DESC']
-                ]
-            });
+      return res.status(StatusCodes.OK).json(vaccines);
+    } catch (error) {
+      next(error);
+    }
+  }) as unknown as RequestHandler,
 
-            if (!vaccines) throw new BadRequestError();
+  create: (async (req: Request<{ petRecordId: string }, object, CreateVaccineRequestBody>, res: Response, next: NextFunction) => {
+    try {
+      const schema = Yup.object().shape({
+        name: Yup.string().required(),
+        injectionDate: Yup.date().required(),
+        reminderDate: Yup.date().nullable(),
+        description: Yup.string().nullable(),
+        petRecordId: Yup.string().required(),
+      });
 
-            return res.status(StatusCodes.OK).json(vaccines);
-        } catch (error) {
-            next(error);
-        }
-    }) as unknown as RequestHandler,
+      if (!(await schema.isValid(req.body))) throw new ValidationError();
 
-    create: (async (
-        req: Request<{ petRecordId: string }, {}, CreateVaccineRequestBody>, 
-        res: Response, 
-        next: NextFunction
-    ) => {
-        try {
-            const schema = Yup.object().shape({
-                name: Yup.string().required(),
-                injectionDate: Yup.date().required(),
-                reminderDate: Yup.date().nullable(),
-                description: Yup.string().nullable(),
-                petRecordId: Yup.string().required(),
-            });
+      // @ts-ignore
+      const vaccine = await Vaccine.create(req.body);
 
-            if (!(await schema.isValid(req.body))) throw new ValidationError();
+      return res.status(StatusCodes.OK).json(vaccine);
+    } catch (error) {
+      next(error);
+    }
+  }) as RequestHandler<{ petRecordId: string }, object, CreateVaccineRequestBody>,
 
-            // @ts-ignore
-            const vaccine = await Vaccine.create(req.body as any);
+  update: (async (req: Request<{ petRecordId: string; vaccineId: string }, object, UpdateVaccineRequestBody>, res: Response, next: NextFunction) => {
+    try {
+      const schema = Yup.object().shape({
+        id: Yup.string().uuid().required(),
+        name: Yup.string().required(),
+        injectionDate: Yup.date().required(),
+        reminderDate: Yup.date().nullable(),
+        description: Yup.string().nullable(),
+        petRecordId: Yup.string().required(),
+        createdAt: Yup.date().required(),
+        updatedAt: Yup.date(),
+      });
 
-            return res.status(StatusCodes.OK).json(vaccine);
-        } catch (error) {
-            next(error);
-        }
-    }) as RequestHandler<{ petRecordId: string }, {}, CreateVaccineRequestBody>,
+      if (!(await schema.isValid(req.body))) throw new ValidationError();
 
-    update: (async (
-        req: Request<{ petRecordId: string, vaccineId: string }, {}, UpdateVaccineRequestBody>,
-        res: Response,
-        next: NextFunction
-    ) => {
-        try {
-            const schema = Yup.object().shape({
-                id: Yup.string().required(),
-                name: Yup.string().required(),
-                injectionDate: Yup.date().required(),
-                reminderDate: Yup.date().nullable(),
-                description: Yup.string().nullable(),
-                petRecordId: Yup.string().required(),
-                createdAt: Yup.date().required(),
-                updatedAt: Yup.date()
-            });
+      // @ts-ignore
+      await Vaccine.update(req.body, { where: { id: req.params.vaccineId } });
 
-            if (!(await schema.isValid(req.body))) throw new ValidationError();
+      // @ts-ignore
+      const updatedVaccine = await Vaccine.findByPk(req.params.vaccineId);
 
-            // // @ts-ignore
-            // req.body.updatedAt = new Date();
+      return res.status(StatusCodes.OK).json(updatedVaccine);
+    } catch (error) {
+      next(error);
+    }
+  }) as RequestHandler<{ petRecordId: string; vaccineId: string }, object, UpdateVaccineRequestBody>,
 
-            // @ts-ignore
-            await Vaccine.update(req.body, { where: { id: req.params.vaccineId } });
+  delete: (async (req: Request<{ petRecordId: string; vaccineId: string }>, res: Response, next: NextFunction) => {
+    try {
+      // @ts-ignore
+      await Vaccine.destroy({ where: { id: req.params.vaccineId } });
 
-            // @ts-ignore
-            const updatedVaccine = await Vaccine.findByPk(req.params.vaccineId);
-
-            if (!updatedVaccine) throw new BadRequestError();
-
-            return res.status(StatusCodes.OK).json(updatedVaccine);
-        } catch (error) {
-            next(error);
-        }
-    }) as RequestHandler<{ petRecordId: string, vaccineId: string }, {}, UpdateVaccineRequestBody>,
-
-    delete: (async (
-        req: Request<{ petRecordId: string, vaccineId: string }>,
-        res: Response,
-        next: NextFunction
-    ) => {
-        try {
-            // @ts-ignore
-            await Vaccine.destroy({ where: { id: req.params.vaccineId } });
-
-            return res.status(StatusCodes.OK).json({ msg: "Deleted" });
-        } catch (error) {
-            next(error);
-        }
-    }) as RequestHandler<{ petRecordId: string, vaccineId: string }>,
-
+      return res.status(StatusCodes.OK).json({ msg: "Deleted" });
+    } catch (error) {
+      next(error);
+    }
+  }) as RequestHandler<{ petRecordId: string; vaccineId: string }>,
 };
 
 export default vaccineController;

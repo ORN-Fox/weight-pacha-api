@@ -19,100 +19,77 @@ interface UpdateInvoiceRequestBody extends CreateInvoiceRequestBody {
 }
 
 const invoiceController = {
+  findAllWithPetRecordId: (async (req: Request<{ petRecordId: string }>, res: Response, next: NextFunction) => {
+    try {
+      const { petRecordId } = req.params;
+      // @ts-ignore
+      const invoices = await Invoice.findAll({
+        where: { petRecordId: petRecordId },
+        order: [["billingDate", "DESC"]],
+      });
 
-    findAllWithPetRecordId: (async (req: Request<{ petRecordId: string }>, res: Response, next: NextFunction) => {
-        try {
-            const { petRecordId } = req.params;
-            // @ts-ignore
-            const invoices = await Invoice.findAll({
-                where: { petRecordId: petRecordId },
-                order: [
-                    ['billingDate', 'DESC']
-                ]
-            });
+      return res.status(StatusCodes.OK).json(invoices);
+    } catch (error) {
+      next(error);
+    }
+  }) as unknown as RequestHandler,
 
-            if (!invoices) throw new BadRequestError();
+  create: (async (req: Request<{ petRecordId: string }, object, CreateInvoiceRequestBody>, res: Response, next: NextFunction) => {
+    try {
+      const schema = Yup.object().shape({
+        billingDate: Yup.date().required(),
+        amount: Yup.number().required(),
+        description: Yup.string().nullable(),
+        petRecordId: Yup.string().required(),
+      });
 
-            return res.status(StatusCodes.OK).json(invoices);
-        } catch (error) {
-            next(error);
-        }
-    }) as unknown as RequestHandler,
+      if (!(await schema.isValid(req.body))) throw new ValidationError();
 
-    create: (async (
-        req: Request<{ petRecordId: string }, {}, CreateInvoiceRequestBody>, 
-        res: Response, 
-        next: NextFunction
-    ) => {
-        try {
-            const schema = Yup.object().shape({
-                billingDate: Yup.date().required(),
-                amount: Yup.number().required(),
-                description: Yup.string().nullable(),
-                petRecordId: Yup.string().required(),
-            });
+      // @ts-ignore
+      const invoice = await Invoice.create(req.body);
 
-            if (!(await schema.isValid(req.body))) throw new ValidationError();
+      return res.status(StatusCodes.OK).json(invoice);
+    } catch (error) {
+      next(error);
+    }
+  }) as RequestHandler<{ petRecordId: string }, object, CreateInvoiceRequestBody>,
 
-            // @ts-ignore
-            const invoice = await Invoice.create(req.body as any);
+  update: (async (req: Request<{ petRecordId: string; invoiceId: string }, object, UpdateInvoiceRequestBody>, res: Response, next: NextFunction) => {
+    try {
+      const schema = Yup.object().shape({
+        id: Yup.string().uuid().required(),
+        billingDate: Yup.date().required(),
+        amount: Yup.number().required(),
+        description: Yup.string().nullable(),
+        petRecordId: Yup.string().required(),
+        createdAt: Yup.date().required(),
+        updatedAt: Yup.date(),
+      });
 
-            return res.status(StatusCodes.OK).json(invoice);
-        } catch (error) {
-            next(error);
-        }
-    }) as RequestHandler<{ petRecordId: string }, {}, CreateInvoiceRequestBody>,
+      if (!(await schema.isValid(req.body))) throw new ValidationError();
 
-    update: (async (
-        req: Request<{ petRecordId: string, invoiceId: string }, {}, UpdateInvoiceRequestBody>,
-        res: Response,
-        next: NextFunction
-    ) => {
-        try {
-            const schema = Yup.object().shape({
-                id: Yup.string().required(),
-                billingDate: Yup.date().required(),
-                amount: Yup.number().required(),
-                description: Yup.string().nullable(),
-                petRecordId: Yup.string().required(),
-                createdAt: Yup.date().required(),
-                updatedAt: Yup.date()
-            });
+      // @ts-ignore
+      await Invoice.update(req.body, { where: { id: req.params.invoiceId } });
 
-            if (!(await schema.isValid(req.body))) throw new ValidationError();
+      // @ts-ignore
+      const updatedInvoice = await Invoice.findByPk(req.params.invoiceId);
 
-            // // @ts-ignore
-            // req.body.updatedAt = new Date();
+      return res.status(StatusCodes.OK).json(updatedInvoice);
+    } catch (error) {
+      next(error);
+    }
+  }) as RequestHandler<{ petRecordId: string; invoiceId: string }, object, UpdateInvoiceRequestBody>,
 
-            // @ts-ignore
-            await Invoice.update(req.body, { where: { id: req.params.invoiceId } });
+  delete: (async (req: Request<{ petRecordId: string; invoiceId: string }>, res: Response, next: NextFunction) => {
+    try {
+      // @ts-ignore
+      await Invoice.destroy({ where: { id: req.params.invoiceId } });
 
-            // @ts-ignore
-            const updatedInvoice = await Invoice.findByPk(req.params.invoiceId);
-
-            if (!updatedInvoice) throw new BadRequestError();
-
-            return res.status(StatusCodes.OK).json(updatedInvoice);
-        } catch (error) {
-            next(error);
-        }
-    }) as RequestHandler<{ petRecordId: string, invoiceId: string }, {}, UpdateInvoiceRequestBody>,
-
-    delete: (async (
-        req: Request<{ petRecordId: string, invoiceId: string }>,
-        res: Response,
-        next: NextFunction
-    ) => {
-        try {
-            // @ts-ignore
-            await Invoice.destroy({ where: { id: req.params.invoiceId } });
-
-            return res.status(StatusCodes.OK).json({ msg: "Deleted" });
-        } catch (error) {
-            next(error);
-        }
-    }) as RequestHandler<{ petRecordId: string, invoiceId: string }>,
-
+      return res.status(StatusCodes.OK).json({ msg: "Deleted" });
+    } catch (error) {
+      next(error);
+    }
+  }) as RequestHandler<{ petRecordId: string; invoiceId: string }>,
 };
 
 export default invoiceController;

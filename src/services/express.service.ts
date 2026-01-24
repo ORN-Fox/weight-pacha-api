@@ -16,11 +16,11 @@ let server: Express;
 const routes: Router[] = [];
 
 const corsOptions = {
-    origin: '*', // TODO replace by valid origin for restrict access (security)
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    credentials: true,
-    optionsSuccessStatus: 204,
-    allowedHeaders: 'Content-Type, Authorization, Content-Length',
+  origin: "*", // TODO replace by valid origin for restrict access (security)
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+  credentials: true,
+  optionsSuccessStatus: 204,
+  allowedHeaders: "Content-Type, Authorization, Content-Length",
 };
 
 interface ExpressService {
@@ -41,8 +41,8 @@ const expressService: ExpressService = {
 
       server = express();
       server.use(bodyParser.json());
-      server.use((cors as (options: cors.CorsOptions) => express.RequestHandler)(corsOptions));      
-      server.options('*', (cors as (options: cors.CorsOptions) => express.RequestHandler)(corsOptions));
+      server.use((cors as (options: cors.CorsOptions) => express.RequestHandler)(corsOptions));
+      server.options("*", (cors as (options: cors.CorsOptions) => express.RequestHandler)(corsOptions));
 
       routes.forEach((route) => {
         server.use(route);
