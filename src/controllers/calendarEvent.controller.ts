@@ -22,147 +22,200 @@ interface UpdateCalendarEventRequestBody extends CreateCalendarEventRequestBody 
 }
 
 const calendarEventController = {
+  findAllWithPetRecordId: (async (req: Request<{ petRecordId: string }>, res: Response, next: NextFunction) => {
+    try {
+      let aggregateEvents: CalendarEvent[] = [];
 
-    findAllWithPetRecordId: (async (req: Request<{ petRecordId: string }>, res: Response, next: NextFunction) => {
-        try {
-            let aggregateEvents: CalendarEvent[] = [];
+      // @ts-ignore
+      const calendarEvents = await CalendarEvent.findAll({
+        where: { petRecordId: req.params.petRecordId },
+        order: [["startDate", "DESC"]],
+      });
 
-            // @ts-ignore
-            const calendarEvents = await CalendarEvent.findAll({
-                where: { petRecordId: req.params.petRecordId },
-                order: [
-                    ['startDate', 'DESC']
-                ]
-            });
+      aggregateEvents = aggregateEvents.concat(calendarEvents);
 
-            if (!calendarEvents) throw new BadRequestError();
+      // @ts-ignore
+      const vaccines = await Vaccine.findAll({
+        where: { petRecordId: req.params.petRecordId },
+        order: [["injectionDate", "DESC"]],
+      });
 
-            aggregateEvents = aggregateEvents.concat(calendarEvents);
+      const convertVaccines = vaccines.map((vaccine) => CalendarEvent.convertVaccineToFullCalendarModel(vaccine));
+      aggregateEvents = aggregateEvents.concat(convertVaccines as CalendarEvent[]);
 
-            // @ts-ignore
-            const vaccines = await Vaccine.findAll({
-                where: { petRecordId: req.params.petRecordId },
-                order: [
-                    ['injectionDate', 'DESC']
-                ]
-            });
+      // @ts-ignore
+      const wormables = await Wormable.findAll({
+        where: { petRecordId: req.params.petRecordId },
+        order: [["injectionDate", "DESC"]],
+      });
 
-            if (!vaccines) throw new BadRequestError();
+      const convertWormables = wormables.map((wormable) => CalendarEvent.convertWormableToFullCalendarModel(wormable));
+      aggregateEvents = aggregateEvents.concat(convertWormables as CalendarEvent[]);
 
-            let convertVaccines = vaccines.map(vaccine => CalendarEvent.convertVaccineToFullCalendarModel(vaccine));
-            aggregateEvents = aggregateEvents.concat(convertVaccines as CalendarEvent[]);
+      return res.status(StatusCodes.OK).json(aggregateEvents);
+    } catch (error) {
+      next(error);
+    }
+  }) as unknown as RequestHandler,
 
-            // @ts-ignore
-            const wormables = await Wormable.findAll({
-                where: { petRecordId: req.params.petRecordId },
-                order: [
-                    ['injectionDate', 'DESC']
-                ]
-            });
+  create: (async (req: Request<{ petRecordId: string }, object, CreateCalendarEventRequestBody>, res: Response, next: NextFunction) => {
+    try {
+      const schema = Yup.object().shape({
+        title: Yup.string().required(),
+        startDate: Yup.date().required(),
+        description: Yup.string().nullable(),
+        eventSource: Yup.number().required(),
+        petRecordId: Yup.string().required(),
+      });
 
-            if (!wormables) throw new BadRequestError();
+      if (!(await schema.isValid(req.body))) throw new ValidationError();
 
-            let convertWormables = wormables.map(wormable => CalendarEvent.convertWormableToFullCalendarModel(wormable));
-            aggregateEvents = aggregateEvents.concat(convertWormables as CalendarEvent[]);
+      const calendarEventToCreate = req.body;
+      let calendarEvent;
 
-            return res.status(StatusCodes.OK).json(aggregateEvents);
-        } catch (error) {
-            next(error);
+      switch (calendarEventToCreate.eventSource as CalendarEventSource) {
+        case CalendarEventSource.CALENDAR:
+          // @ts-ignore
+          calendarEvent = await CalendarEvent.create(calendarEventToCreate);
+          break;
+
+        case CalendarEventSource.VACCINE: {
+          // @ts-ignore
+          const vaccine = await Vaccine.create({
+            name: calendarEventToCreate.title,
+            injectionDate: calendarEventToCreate.startDate,
+            reminderDate: null,
+            description: calendarEventToCreate.description,
+            petRecordId: calendarEventToCreate.petRecordId,
+          });
+
+          calendarEvent = CalendarEvent.convertVaccineToFullCalendarModel(vaccine);
+          break;
         }
-    }) as unknown as RequestHandler,
 
-    create: (async (
-        req: Request<{ petRecordId: string }, {}, CreateCalendarEventRequestBody>,
-        res: Response,
-        next: NextFunction
-    ) => {
-        try {
-            const schema = Yup.object().shape({
-                title: Yup.string().required(),
-                startDate: Yup.date().required(),
-                description: Yup.string().nullable(),
-                petRecordId: Yup.string().required(),
-            });
+        case CalendarEventSource.WORMABLE: {
+          // @ts-ignore
+          const wormable = await Wormable.create({
+            name: calendarEventToCreate.title,
+            injectionDate: calendarEventToCreate.startDate,
+            reminderDate: null,
+            description: calendarEventToCreate.description,
+            petRecordId: calendarEventToCreate.petRecordId,
+          });
 
-            if (!(await schema.isValid(req.body))) throw new ValidationError();
-
-            // TODO handle vaccine and wormable event creation (frontend 0.4.0)
-            // @ts-ignore
-            const calendarEvent = await CalendarEvent.create(req.body as any);
-
-            return res.status(StatusCodes.OK).json(calendarEvent);
-        } catch (error) {
-            next(error);
+          calendarEvent = CalendarEvent.convertWormableToFullCalendarModel(wormable);
+          break;
         }
-    }) as RequestHandler<{ petRecordId: string }, {}, CreateCalendarEventRequestBody>,
+      }
 
-    update: (async (
-        req: Request<{ petRecordId: string, calendarEventId: string }, {}, UpdateCalendarEventRequestBody>,
-        res: Response,
-        next: NextFunction
-    ) => {
-        try {
-            const schema = Yup.object().shape({
-                id: Yup.string().required(),
-                title: Yup.string().required(),
-                startDate: Yup.date().required(),
-                description: Yup.string().nullable(),
-                petRecordId: Yup.string().required(),
-                createdAt: Yup.date().required(),
-                updatedAt: Yup.date()
-            });
+      return res.status(StatusCodes.OK).json(calendarEvent);
+    } catch (error) {
+      next(error);
+    }
+  }) as RequestHandler<{ petRecordId: string }, object, CreateCalendarEventRequestBody>,
 
-            if (!(await schema.isValid(req.body))) throw new ValidationError();
+  update: (async (
+    req: Request<{ petRecordId: string; calendarEventId: string }, object, UpdateCalendarEventRequestBody>,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const schema = Yup.object().shape({
+        id: Yup.string().uuid().required(),
+        title: Yup.string().required(),
+        startDate: Yup.date().required(),
+        description: Yup.string().nullable(),
+        eventSource: Yup.number().required(),
+        petRecordId: Yup.string().required(),
+        createdAt: Yup.date().required(),
+      });
 
-            // // @ts-ignore
-            // req.body.updatedAt = new Date();
+      if (!(await schema.isValid(req.body))) throw new ValidationError();
 
-            // TODO handle vaccine and wormable event updation (frontend 0.4.0)
-            // @ts-ignore
-            await CalendarEvent.update(req.body, { where: { id: req.params.calendarEventId } });
+      const calendarEventToUpdate = req.body;
+      let updatedCalendarEvent;
 
-            // @ts-ignore
-            const updatedCalendarEvent = await CalendarEvent.findByPk(req.params.calendarEventId);
+      switch (calendarEventToUpdate.eventSource as CalendarEventSource) {
+        case CalendarEventSource.CALENDAR:
+          // @ts-ignore
+          await CalendarEvent.update(calendarEventToUpdate, { where: { id: req.params.calendarEventId } });
+          // @ts-ignore
+          updatedCalendarEvent = await CalendarEvent.findByPk(req.params.calendarEventId);
+          break;
 
-            if (!updatedCalendarEvent) throw new BadRequestError();
+        case CalendarEventSource.VACCINE: {
+          // @ts-ignore
+          await Vaccine.update(
+            {
+              id: calendarEventToUpdate.id,
+              name: calendarEventToUpdate.title,
+              injectionDate: calendarEventToUpdate.startDate,
+              reminderDate: null,
+              description: calendarEventToUpdate.description,
+              petRecordId: calendarEventToUpdate.petRecordId,
+            },
+            { where: { id: req.params.calendarEventId } },
+          );
 
-            return res.status(StatusCodes.OK).json(updatedCalendarEvent);
-        } catch (error) {
-            next(error);
+          // @ts-ignore
+          const vaccine = await Vaccine.findByPk(req.params.calendarEventId);
+          updatedCalendarEvent = CalendarEvent.convertVaccineToFullCalendarModel(vaccine);
+          break;
         }
-    }) as RequestHandler<{ petRecordId: string, calendarEventId: string }, {}, UpdateCalendarEventRequestBody>,
 
-    delete: (async (
-        req: Request<{ petRecordId: string, calendarEventId: string, eventSource: string }>,
-        res: Response,
-        next: NextFunction
-    ) => {
-        try {
-            const eventSource = parseInt(req.params.eventSource);
-            
-            switch (eventSource) {
-                case CalendarEventSource.CALENDAR:
-                     // @ts-ignore
-                    await CalendarEvent.destroy({ where: { id: req.params.calendarEventId } });
-                    break;
+        case CalendarEventSource.WORMABLE: {
+          // @ts-ignore
+          await Wormable.update(
+            {
+              id: calendarEventToUpdate.id,
+              name: calendarEventToUpdate.title,
+              injectionDate: calendarEventToUpdate.startDate,
+              reminderDate: null,
+              description: calendarEventToUpdate.description,
+              petRecordId: calendarEventToUpdate.petRecordId,
+            },
+            { where: { id: req.params.calendarEventId } },
+          );
 
-                case CalendarEventSource.VACCINE:
-                     // @ts-ignore
-                    await Vaccine.destroy({ where: { id: req.params.calendarEventId } });
-                    break;
-
-                case CalendarEventSource.WORMABLE:
-                     // @ts-ignore
-                    await Wormable.destroy({ where: { id: req.params.calendarEventId } });
-                    break;
-            }
-
-            return res.status(StatusCodes.OK).json({ msg: "Deleted" });
-        } catch (error) {
-            next(error);
+          // @ts-ignore
+          const wormable = await Wormable.findByPk(req.params.calendarEventId);
+          updatedCalendarEvent = CalendarEvent.convertWormableToFullCalendarModel(wormable);
+          break;
         }
-    }) as RequestHandler<{ petRecordId: string, calendarEventId: string, eventSource: string }>,
+      }
 
+      return res.status(StatusCodes.OK).json(updatedCalendarEvent);
+    } catch (error) {
+      next(error);
+    }
+  }) as RequestHandler<{ petRecordId: string; calendarEventId: string }, object, UpdateCalendarEventRequestBody>,
+
+  delete: (async (req: Request<{ petRecordId: string; calendarEventId: string; eventSource: string }>, res: Response, next: NextFunction) => {
+    try {
+      const eventSource: CalendarEventSource = parseInt(req.params.eventSource);
+
+      switch (eventSource) {
+        case CalendarEventSource.CALENDAR:
+          // @ts-ignore
+          await CalendarEvent.destroy({ where: { id: req.params.calendarEventId } });
+          break;
+
+        case CalendarEventSource.VACCINE:
+          // @ts-ignore
+          await Vaccine.destroy({ where: { id: req.params.calendarEventId } });
+          break;
+
+        case CalendarEventSource.WORMABLE:
+          // @ts-ignore
+          await Wormable.destroy({ where: { id: req.params.calendarEventId } });
+          break;
+      }
+
+      return res.status(StatusCodes.OK).json({ msg: "Deleted" });
+    } catch (error) {
+      next(error);
+    }
+  }) as RequestHandler<{ petRecordId: string; calendarEventId: string; eventSource: string }>,
 };
 
 export default calendarEventController;
