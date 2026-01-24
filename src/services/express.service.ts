@@ -9,19 +9,11 @@ import { dirname } from "path";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-/*
-  body-parser: Parse incoming request bodies in a middleware before your handlers, 
-  available under the req.body property.
-*/
-
-const routesDir = process.env.NODE_ENV === "production"
-  ? __dirname + "/../../dist/routes/"
-  : __dirname + "/../routes/";
-const routeFiles = fs
-  .readdirSync(routesDir);
+const routesDir = process.env.NODE_ENV === "production" ? __dirname + "/../../dist/routes/" : __dirname + "/../routes/";
+const routeFiles = fs.readdirSync(routesDir);
 
 let server: Express;
-let routes: Router[] = [];
+const routes: Router[] = [];
 
 const corsOptions = {
     origin: '*', // TODO replace by valid origin for restrict access (security)
@@ -55,14 +47,14 @@ const expressService: ExpressService = {
       routes.forEach((route) => {
         server.use(route);
       });
-      
+
       server.get("/", (_req, res) => {
         res.send("Hello World!");
       });
 
       server.use(globalErrorHandler);
 
-      const port = process.env.SERVER_PORT || 3000;
+      const port = process.env.SERVER_PORT ?? "3000";
       server.listen(port, () => {
         console.log(`[EXPRESS] Server listening on port ${port}`);
       });
