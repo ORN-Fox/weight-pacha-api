@@ -7,18 +7,18 @@ dotenv.config();
 
 const services = [expressService, jwtService, sequelizeService];
 
-(async (): Promise<void> => {
+await (async (): Promise<void> => {
   try {
     for (const service of services) {
       await service.init();
     }
-    
+
     console.log("[SERVER] All services initialized successfully");
     console.log("[SERVER] API is ready and waiting for connections...");
 
     // Log process events to diagnose unexpected exits
     process.on("exit", (code) => {
-      console.log(`[SERVER] Process exit event with code: ${code}`);
+      console.log(`[SERVER] Process exit event with code: ${code.toString()}`);
     });
     process.on("SIGINT", () => {
       console.log("[SERVER] Received SIGINT. Shutting down...");
@@ -29,7 +29,7 @@ const services = [expressService, jwtService, sequelizeService];
       process.exit(0);
     });
     process.on("beforeExit", (code) => {
-      console.log(`[SERVER] beforeExit event with code: ${code}`);
+      console.log(`[SERVER] beforeExit event with code: ${code.toString()}`);
     });
   } catch (error) {
     console.error("[SERVER] Initialization error:", error);
