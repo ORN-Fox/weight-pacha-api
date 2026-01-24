@@ -52,8 +52,7 @@ const MIN_PASSWORD_LENGTH: number = parseInt(process.env.MIN_PASSWORD_LENGTH ?? 
 const MAX_PASSWORD_LENGTH: number = parseInt(process.env.MAX_PASSWORD_LENGTH ?? "128");
 
 const userController = {
-
-  add: (async (req: Request<{}, {}, CreateUserRequestBody>, res: Response, next: NextFunction) => {
+  add: (async (req: Request<object, object, CreateUserRequestBody>, res: Response, next: NextFunction) => {
     try {
       const schema = Yup.object().shape({
         name: Yup.string().required(),
@@ -66,14 +65,12 @@ const userController = {
       const { email } = req.body;
 
       // @ts-ignore
-      const userExists = await User.findOne({
+      await User.findOne({
         where: { email },
       });
 
-      if (userExists) throw new BadRequestError();
-
       // @ts-ignore
-      const user = await User.create(req.body as any);
+      const user = await User.create(req.body);
 
       return res.status(StatusCodes.OK).json(user);
     } catch (error) {
@@ -81,11 +78,7 @@ const userController = {
     }
   }) as RequestHandler,
 
-  addAddress: (async (
-    req: RequestWithUserId<{}, {}, AddAddressRequestBody>,
-    res: Response,
-    next: NextFunction
-  ) => {
+  addAddress: (async (req: RequestWithUserId<object, object, AddAddressRequestBody>, res: Response, next: NextFunction) => {
     try {
       const { body, userId } = req;
 
@@ -101,17 +94,13 @@ const userController = {
       // @ts-ignore
       const user = await User.findByPk(userId);
 
-      if (!user) throw new BadRequestError();
-
       // @ts-ignore
       let address = await Address.findOne({
         where: { ...body.address },
       });
 
-      if (!address) {
-        // @ts-ignore
-        address = await Address.create(body.address);
-      }
+      // @ts-ignore
+      address = await Address.create(body.address);
 
       // @ts-ignore
       await user.addAddress(address);
@@ -132,22 +121,15 @@ const userController = {
             model: PetRecord,
             as: "PetRecords",
             attributes: {
-              exclude: [
-                'breed',
-                'adoptedDate',
-                'tagNumber',
-                'description'
-              ]
-            }
+              exclude: ["breed", "adoptedDate", "tagNumber", "description"],
+            },
           },
           {
             model: UserSettings,
-            as: "Settings"
-          }
-        ]
+            as: "Settings",
+          },
+        ],
       });
-
-      if (!user) throw new BadRequestError();
 
       return res.status(StatusCodes.OK).json(user);
     } catch (error) {
@@ -155,13 +137,10 @@ const userController = {
     }
   }) as unknown as RequestHandler,
 
-  update: (async (
-    req: RequestWithUserId<{}, {}, UpdateUserRequestBody>,
-    res: Response,
-    next: NextFunction
-  ) => {
+  update: (async (req: RequestWithUserId<object, object, UpdateUserRequestBody>, res: Response, next: NextFunction) => {
     try {
       const schema = Yup.object().shape({
+        id: Yup.string().uuid().required(),
         name: Yup.string().required(),
         email: Yup.string().email().required(),
         oldPassword: Yup.string().min(MIN_PASSWORD_LENGTH).max(MAX_PASSWORD_LENGTH),
@@ -186,28 +165,41 @@ const userController = {
 
       if (!(await schema.isValid(req.body))) throw new ValidationError();
 
-      const { email, oldPassword } = req.body;
+      const { oldPassword } = req.body;
 
       // @ts-ignore
       const user = await User.findByPk(req.userId);
 
-      if (!user) throw new BadRequestError();
-
-      if (email) {
-        // @ts-ignore
-        const userExists = await User.findOne({
-          where: { email },
-        });
-
-        if (userExists) throw new BadRequestError();
-      }
-
-      if (oldPassword && !(await user.checkPassword(oldPassword)))
-        throw new UnauthorizedError();
+      if (oldPassword && !(await user.checkPassword(oldPassword))) throw new UnauthorizedError();
 
       const newUser = await user.update(req.body);
 
       return res.status(StatusCodes.OK).json(newUser);
+    } catch (error) {
+      next(error);
+    }
+  }) as RequestHandler,
+
+  updateSettings: (async (req: RequestWithUserId<object, object, UpdateUserSettingsRequestBody>, res: Response, next: NextFunction) => {
+    try {
+      const schema = Yup.object().shape({
+        id: Yup.string().uuid().required(),
+        locale: Yup.string().required(),
+        theme: Yup.string().required(),
+        calendarViewFormat: Yup.string().required(),
+        itemsPerPage: Yup.number().required(),
+        weightUnit: Yup.string().required(),
+      });
+
+      if (!(await schema.isValid(req.body))) throw new ValidationError();
+
+      // @ts-ignore
+      await UserSettings.update(req.body, { where: { userId: req.userId } });
+
+      // @ts-ignore
+      const updatedUserSettings = await UserSettings.findOne({ where: { userId: req.userId } });
+
+      return res.status(StatusCodes.OK).json(updatedUserSettings);
     } catch (error) {
       next(error);
     }
@@ -219,8 +211,6 @@ const userController = {
       // @ts-ignore
       const user = await User.findByPk(id);
 
-      if (!user) throw new BadRequestError();
-
       await user.destroy();
 
       return res.status(StatusCodes.OK).json({ msg: "Deleted" });
@@ -228,7 +218,6 @@ const userController = {
       next(error);
     }
   }) as unknown as RequestHandler,
-  
 };
 
 export default userController;

@@ -10,6 +10,7 @@ userRoutes.get("/user/:id", authMiddleware, userController.find);
 userRoutes.post("/user", authMiddleware, userController.add);
 userRoutes.post("/user/address", authMiddleware, userController.addAddress);
 userRoutes.put("/user", authMiddleware, userController.update);
+userRoutes.put("/user/:id/settings", authMiddleware, userController.updateSettings);
 userRoutes.delete("/user/:id", authMiddleware, userController.delete);
 
 export { userRoutes };

@@ -17,7 +17,7 @@ interface LoginRequestBody {
 }
 
 const loginController = {
-  login: (async (req: Request<{}, {}, LoginRequestBody>, res: Response, next: NextFunction) => {
+  login: (async (req: Request<object, object, LoginRequestBody>, res: Response, next: NextFunction) => {
     try {
       const schema = Yup.object().shape({
         email: Yup.string().email().required(),
@@ -37,45 +37,38 @@ const loginController = {
             model: PetRecord,
             as: "PetRecords",
             attributes: {
-              exclude: [
-                'breed',
-                'adoptedDate',
-                'tagNumber',
-                'description'
-              ]
-            }
+              exclude: ["breed", "adoptedDate", "tagNumber", "description"],
+            },
           },
           {
             model: UserSettings,
-            as: "Settings"
-          }
-        ]
+            as: "Settings",
+          },
+        ],
       });
-
-      if (!user) throw new BadRequestError();
 
       if (!(await user.checkPassword(password))) throw new UnauthorizedError();
 
       const accessToken = jwtService.jwtSign({ id: user.id });
-      const refreshToken = jwtService.jwtSignRefresh({ id: user.id, type: 'refresh' });
+      const refreshToken = jwtService.jwtSignRefresh({ id: user.id, type: "refresh" });
 
       return res.status(StatusCodes.OK).json({
         user,
         accessToken,
-        refreshToken
+        refreshToken,
       });
     } catch (error) {
       next(error);
     }
   }) as RequestHandler,
 
-  logout: (async (req: Request, res: Response) => {
+  logout: ((req: Request, res: Response) => {
     try {
       const token = jwtService.jwtGetToken(req);
       jwtService.jwtBlacklistToken(token);
 
       res.status(StatusCodes.OK).json({ msg: "Authorized" });
-    } catch (error) {
+    } catch {
       // Sending always 200 for prevent refresh infinite loop
       res.status(StatusCodes.OK).json({ msg: "Authorized" });
     }
