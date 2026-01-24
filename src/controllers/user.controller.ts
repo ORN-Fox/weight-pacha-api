@@ -43,8 +43,8 @@ interface RequestWithUserId<
 
 //Yup is a JavaScript schema builder for value parsing and validation.
 
-const MIN_PASSWORD_LENGTH: number = parseInt(process.env.MIN_PASSWORD_LENGTH || "8");
-const MAX_PASSWORD_LENGTH: number = 128;
+const MIN_PASSWORD_LENGTH: number = parseInt(process.env.MIN_PASSWORD_LENGTH ?? "8");
+const MAX_PASSWORD_LENGTH: number = parseInt(process.env.MAX_PASSWORD_LENGTH ?? "128");
 
 const userController = {
 

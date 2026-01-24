@@ -42,21 +42,22 @@ npm run dev
 
 Variables for the environment
 
-| Option                | Description                       |
-| ----------------------| --------------------------------- |
-| SERVER_PORT           | Port the server will run on       |
-| NODE_ENV              | development, test or production   |
-| CLIENT_BASE_URL       | localhost or custom domain        |
-| SERVER_JWT_ENABLED    | true or false                     |
-| SERVER_JWT_SECRET     | JWT secret                        |
-| SERVER_JWT_TIMEOUT    | JWT duration time in ms           |
-| DB_DIALECT            | "mysql", among others             |
-| DB_HOST               | Database host                     |
-| DB_PORT               | Database port                     |
-| DB_USER               | Database username                 |
-| DB_PASS               | Database password                 |
-| DB_NAME               | Database name                     |
-| MIN_PASSWORD_LENGTH   | Min password length               |
+| Option              | Description                       |
+| ------------------- | --------------------------------- |
+| SERVER_PORT         | Port the server will run on       |
+| NODE_ENV            | development, test or production   |
+| CLIENT_BASE_URL     | localhost or custom domain        |
+| SERVER_JWT_ENABLED  | true or false                     |
+| SERVER_JWT_SECRET   | JWT secret                        |
+| SERVER_JWT_TIMEOUT  | JWT duration time in ms           |
+| DB_DIALECT          | "mysql", among others             |
+| DB_HOST             | Database host                     |
+| DB_PORT             | Database port                     |
+| DB_USER             | Database username                 |
+| DB_PASS             | Database password                 |
+| DB_NAME             | Database name                     |
+| MIN_PASSWORD_LENGTH | Min password length (Default 8)   |
+| MAX_PASSWORD_LENGTH | Max password length (Default 128) |
 
 ## Commands for sequelize
 
