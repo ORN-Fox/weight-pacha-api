@@ -15,6 +15,14 @@ interface CreateUserRequestBody {
   password: string;
 }
 
+interface UpdateUserRequestBody {
+  name?: string;
+  email?: string;
+  oldPassword?: string;
+  password?: string;
+  confirmPassword?: string;
+}
+
 interface AddAddressRequestBody {
   address: {
     city: string;
@@ -24,20 +32,17 @@ interface AddAddressRequestBody {
   };
 }
 
-interface UpdateUserRequestBody {
-  name?: string;
-  email?: string;
-  oldPassword?: string;
-  password?: string;
-  confirmPassword?: string;
+interface UpdateUserSettingsRequestBody {
+  id: string;
+  locale?: string;
+  theme?: string;
+  calendarViewFormat?: string;
+  itemsPerPage?: number;
+  weightUnit?: string;
 }
 
-interface RequestWithUserId<
-  P = any,
-  ResBody = any,
-  ReqBody = any,
-  ReqQuery = any
-> extends Request<P, ResBody, ReqBody, ReqQuery> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+interface RequestWithUserId<P = any, ResBody = any, ReqBody = any, ReqQuery = any> extends Request<P, ResBody, ReqBody, ReqQuery> {
   userId?: string;
 }
 

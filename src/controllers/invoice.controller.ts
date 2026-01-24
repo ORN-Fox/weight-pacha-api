@@ -2,20 +2,20 @@ import { Request, Response, NextFunction, RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
 import * as Yup from "yup";
 
-import { BadRequestError, ValidationError } from "@/utils/ApiError.js";
+import { ValidationError } from "@/utils/ApiError.js";
 
 import Invoice from "@/models/Invoice.js";
 
 interface CreateInvoiceRequestBody {
-    billingDate: Date;
-    amount: number;
-    description: string;
-    petRecordId: string;
+  billingDate: Date;
+  amount: number;
+  description: string;
+  petRecordId: string;
 }
 
 interface UpdateInvoiceRequestBody extends CreateInvoiceRequestBody {
-    id: string;
-    createdAt: Date;
+  id: string;
+  createdAt: Date;
 }
 
 const invoiceController = {

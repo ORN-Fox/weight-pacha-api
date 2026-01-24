@@ -7,14 +7,14 @@ import { ValidationError } from "@/utils/ApiError.js";
 import Measure from "@/models/Measure.js";
 
 interface CreateMeasureRequestBody {
-    date: string;
-    weight: number;
-    petRecordId: string;
+  date: string;
+  weight: number;
+  petRecordId: string;
 }
 
 interface UpdateMeasureRequestBody extends CreateMeasureRequestBody {
-    id: string;
-    createdAt: Date;
+  id: string;
+  createdAt: Date;
 }
 
 const measureController = {

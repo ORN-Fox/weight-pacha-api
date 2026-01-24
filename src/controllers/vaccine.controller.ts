@@ -7,16 +7,16 @@ import { ValidationError } from "@/utils/ApiError.js";
 import Vaccine from "@/models/Vaccine.js";
 
 interface CreateVaccineRequestBody {
-    name: string;
-    injectionDate: Date;
-    reminderDate: Date;
-    description: string;
-    petRecordId: string;
+  name: string;
+  injectionDate: Date;
+  reminderDate: Date;
+  description: string;
+  petRecordId: string;
 }
 
 interface UpdateVaccineRequestBody extends CreateVaccineRequestBody {
-    id: string;
-    createdAt: Date;
+  id: string;
+  createdAt: Date;
 }
 
 const vaccineController = {

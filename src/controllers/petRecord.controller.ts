@@ -7,20 +7,20 @@ import { ValidationError } from "@/utils/ApiError.js";
 import PetRecord from "@/models/PetRecord.js";
 import UserPetRecord from "@/models/UserPetRecord.js";
 
-interface CreateOrUpdatePetRecordRequestBody {
-    firstName: string;
-    lastName: string;
-    specie: number;
-    breed: string;
-    sex: number;
-    color: string;
-    birthDate: string;
-    adoptedDate: string;
-    sterilize: boolean;
-    sterilizeDate: string;
-    tagNumber: string;
-    tagRageNumber: string;
-    description: string;
+interface CreatePetRecordRequestBody {
+  firstName: string;
+  lastName: string;
+  specie: number;
+  breed: string;
+  sex: number;
+  color: string;
+  birthDate: string;
+  adoptedDate: string;
+  sterilize: boolean;
+  sterilizeDate: string;
+  tagNumber: string;
+  tagRageNumber: string;
+  description: string;
 }
 
 const petRecordController = {
@@ -125,6 +125,10 @@ const petRecordController = {
             next(error);
         }
     }) as RequestHandler<{ id: string }, any, CreateOrUpdatePetRecordRequestBody>,
+interface UpdatePetRecordRequestBody extends CreatePetRecordRequestBody {
+  id: string;
+  createdAt: Date;
+}
 
 };
 

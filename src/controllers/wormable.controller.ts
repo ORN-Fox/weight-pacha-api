@@ -7,16 +7,16 @@ import { ValidationError } from "@/utils/ApiError.js";
 import Wormable from "@/models/Wormable.js";
 
 interface CreateWormableRequestBody {
-    name: string;
-    injectionDate: Date;
-    reminderDate: Date;
-    description: string;
-    petRecordId: string;
+  name: string;
+  injectionDate: Date;
+  reminderDate: Date;
+  description: string;
+  petRecordId: string;
 }
 
 interface UpdateWormableRequestBody extends CreateWormableRequestBody {
-    id: string;
-    createdAt: Date;
+  id: string;
+  createdAt: Date;
 }
 
 const wormableController = {

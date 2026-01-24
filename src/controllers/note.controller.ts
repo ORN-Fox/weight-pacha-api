@@ -7,12 +7,13 @@ import { ValidationError } from "@/utils/ApiError.js";
 import Note from "@/models/Note.js";
 
 interface CreateNoteRequestBody {
-    name: string;
-    description: string;
+  name: string;
+  description: string;
 }
 
 interface UpdateNoteRequestBody extends CreateNoteRequestBody {
-    createdAt: Date;
+  id: string;
+  createdAt: Date;
 }
 
 const noteController = {

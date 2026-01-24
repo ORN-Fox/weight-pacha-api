@@ -9,15 +9,16 @@ import Vaccine from "@/models/Vaccine";
 import Wormable from "@/models/Wormable.js";
 
 interface CreateCalendarEventRequestBody {
-    title: string;
-    startDate: Date;
-    description: string;
-    petRecordId: string;
+  title: string;
+  startDate: Date;
+  description: string;
+  eventSource: number;
+  petRecordId: string;
 }
 
 interface UpdateCalendarEventRequestBody extends CreateCalendarEventRequestBody {
-    id: string;
-    createdAt: Date;
+  id: string;
+  createdAt: Date;
 }
 
 const calendarEventController = {
