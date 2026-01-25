@@ -14,6 +14,9 @@ interface CreateCalendarEventRequestBody {
   description: string;
   eventSource: number;
   petRecordId: string;
+
+  // vaccine or wormable related
+  reminderDate: Date;
 }
 
 interface UpdateCalendarEventRequestBody extends CreateCalendarEventRequestBody {
@@ -66,6 +69,9 @@ const calendarEventController = {
         description: Yup.string().nullable(),
         eventSource: Yup.number().required(),
         petRecordId: Yup.string().required(),
+
+        // vaccine or wormable related
+        reminderDate: Yup.date().nullable(),
       });
 
       if (!(await schema.isValid(req.body))) throw new ValidationError();
@@ -84,7 +90,7 @@ const calendarEventController = {
           const vaccine = await Vaccine.create({
             name: calendarEventToCreate.title,
             injectionDate: calendarEventToCreate.startDate,
-            reminderDate: null,
+            reminderDate: calendarEventToCreate.reminderDate,
             description: calendarEventToCreate.description,
             petRecordId: calendarEventToCreate.petRecordId,
           });
@@ -98,7 +104,7 @@ const calendarEventController = {
           const wormable = await Wormable.create({
             name: calendarEventToCreate.title,
             injectionDate: calendarEventToCreate.startDate,
-            reminderDate: null,
+            reminderDate: calendarEventToCreate.reminderDate,
             description: calendarEventToCreate.description,
             petRecordId: calendarEventToCreate.petRecordId,
           });
@@ -128,6 +134,9 @@ const calendarEventController = {
         eventSource: Yup.number().required(),
         petRecordId: Yup.string().required(),
         createdAt: Yup.date().required(),
+
+        // vaccine or wormable related
+        reminderDate: Yup.date().nullable(),
       });
 
       if (!(await schema.isValid(req.body))) throw new ValidationError();
@@ -150,7 +159,7 @@ const calendarEventController = {
               id: calendarEventToUpdate.id,
               name: calendarEventToUpdate.title,
               injectionDate: calendarEventToUpdate.startDate,
-              reminderDate: null,
+              reminderDate: calendarEventToUpdate.reminderDate,
               description: calendarEventToUpdate.description,
               petRecordId: calendarEventToUpdate.petRecordId,
             },
@@ -170,7 +179,7 @@ const calendarEventController = {
               id: calendarEventToUpdate.id,
               name: calendarEventToUpdate.title,
               injectionDate: calendarEventToUpdate.startDate,
-              reminderDate: null,
+              reminderDate: calendarEventToUpdate.reminderDate,
               description: calendarEventToUpdate.description,
               petRecordId: calendarEventToUpdate.petRecordId,
             },
