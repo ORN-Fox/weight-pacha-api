@@ -47,6 +47,20 @@ class CalendarEvent extends Model {
     this.hasOne(models.PetRecord, { foreignKey: "id", as: "PetRecord" });
   }
 
+  static convertCalendarEventToFullCalendarModel(calendarEvent: CalendarEvent) {
+    return {
+      id: calendarEvent.id,
+      title: calendarEvent.title,
+      startDate: calendarEvent.startDate,
+      reminderDate: null,
+      description: calendarEvent.description,
+      eventSource: CalendarEventSource.CALENDAR,
+      petRecordId: calendarEvent.petRecordId,
+      createdAt: calendarEvent.createdAt,
+      updatedAt: calendarEvent.updatedAt,
+    };
+  }
+
   static convertVaccineToFullCalendarModel(vaccine: Vaccine) {
     return {
       id: vaccine.id,

@@ -35,7 +35,8 @@ const calendarEventController = {
         order: [["startDate", "DESC"]],
       });
 
-      aggregateEvents = aggregateEvents.concat(calendarEvents);
+      const convertCalendarEvents = calendarEvents.map((calendarEvent) => CalendarEvent.convertCalendarEventToFullCalendarModel(calendarEvent));
+      aggregateEvents = aggregateEvents.concat(convertCalendarEvents as never[]);
 
       // @ts-ignore
       const vaccines = await Vaccine.findAll({
@@ -44,7 +45,7 @@ const calendarEventController = {
       });
 
       const convertVaccines = vaccines.map((vaccine) => CalendarEvent.convertVaccineToFullCalendarModel(vaccine));
-      aggregateEvents = aggregateEvents.concat(convertVaccines as CalendarEvent[]);
+      aggregateEvents = aggregateEvents.concat(convertVaccines as never[]);
 
       // @ts-ignore
       const wormables = await Wormable.findAll({
@@ -53,7 +54,7 @@ const calendarEventController = {
       });
 
       const convertWormables = wormables.map((wormable) => CalendarEvent.convertWormableToFullCalendarModel(wormable));
-      aggregateEvents = aggregateEvents.concat(convertWormables as CalendarEvent[]);
+      aggregateEvents = aggregateEvents.concat(convertWormables as never[]);
 
       return res.status(StatusCodes.OK).json(aggregateEvents);
     } catch (error) {
