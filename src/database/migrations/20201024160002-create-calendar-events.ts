@@ -1,5 +1,3 @@
-"use strict";
-
 import { DataTypes, QueryInterface } from "sequelize";
 
 export async function up(queryInterface: QueryInterface): Promise<void> {
