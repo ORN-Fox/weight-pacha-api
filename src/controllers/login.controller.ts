@@ -2,13 +2,13 @@ import { Request, Response, NextFunction, RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
 import * as Yup from "yup";
 
-import { UnauthorizedError, ValidationError } from "@/utils/ApiError.js";
+import { UnauthorizedError, ValidationError } from "@utils/ApiError.js";
 
-import jwtService from "@/services/jwt.service.js";
+import jwtService from "@services/jwt.service.js";
 
-import PetRecord from "@/models/PetRecord";
-import User from "@/models/User";
-import UserSettings from "@/models/UserSettings";
+import PetRecord from "@models/PetRecord";
+import User from "@models/User";
+import UserSettings from "@models/UserSettings";
 
 interface LoginRequestBody {
   email: string;

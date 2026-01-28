@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction, RequestHandler } from "express";
 
-import { BadTokenError } from "@/utils/ApiError.js";
+import { BadTokenError } from "@utils/ApiError.js";
 
-import jwtService from "@/services/jwt.service.js";
+import jwtService from "@services/jwt.service.js";
 
 const authMiddleware: RequestHandler = async (req: Request, _res: Response, next: NextFunction) => {
   try {

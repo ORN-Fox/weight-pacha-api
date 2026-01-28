@@ -2,9 +2,9 @@ import { Request, Response, NextFunction, RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
 import * as Yup from "yup";
 
-import { ValidationError } from "@/utils/ApiError.js";
+import { ValidationError } from "@utils/ApiError.js";
 
-import Invoice from "@/models/Invoice.js";
+import Invoice from "@models/Invoice.js";
 
 interface CreateInvoiceRequestBody {
   billingDate: Date;

@@ -2,10 +2,10 @@ import { Request, Response, NextFunction, RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
 import * as Yup from "yup";
 
-import { ValidationError } from "@/utils/ApiError.js";
+import { ValidationError } from "@utils/ApiError.js";
 
-import PetRecord from "@/models/PetRecord.js";
-import UserPetRecord from "@/models/UserPetRecord.js";
+import PetRecord from "@models/PetRecord.js";
+import UserPetRecord from "@models/UserPetRecord.js";
 
 interface CreatePetRecordRequestBody {
   firstName: string;

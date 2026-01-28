@@ -2,11 +2,11 @@ import { Request, Response, NextFunction, RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
 import * as Yup from "yup";
 
-import { ValidationError } from "@/utils/ApiError";
+import { ValidationError } from "@utils/ApiError";
 
-import CalendarEvent, { CalendarEventSource } from "@/models/CalendarEvent";
-import Vaccine from "@/models/Vaccine";
-import Wormable from "@/models/Wormable.js";
+import CalendarEvent, { CalendarEventSource } from "@models/CalendarEvent";
+import Vaccine from "@models/Vaccine";
+import Wormable from "@models/Wormable.js";
 
 interface CreateCalendarEventRequestBody {
   title: string;

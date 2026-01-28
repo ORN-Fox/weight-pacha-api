@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 
-import { IsApiError } from "@/utils/ApiError.js";
+import { IsApiError } from "@utils/ApiError.js";
 
 const currentEnv = process.env.NODE_ENV ?? "development";
 

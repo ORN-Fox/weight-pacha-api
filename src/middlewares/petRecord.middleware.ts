@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 
-import { BadRequestError } from "@/utils/ApiError.js";
+import { BadRequestError } from "@utils/ApiError.js";
 
-import PetRecord from "@/models/PetRecord.js";
-import UserPetRecord from "@/models/UserPetRecord.js";
+import PetRecord from "@models/PetRecord.js";
+import UserPetRecord from "@models/UserPetRecord.js";
 
 export async function petRecordMiddleware(req: Request, res: Response, next: NextFunction) {
   try {
