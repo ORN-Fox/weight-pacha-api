@@ -7,7 +7,7 @@ class UserSettings extends Model {
   declare theme: string;
   declare calendarViewFormat: string;
   declare itemsPerPage: number;
-  declare weightUnit: number;
+  declare favoritePetRecordId: string;
   declare userId: string;
   declare readonly createdAt: Date;
   declare readonly updatedAt: Date;
@@ -24,7 +24,7 @@ class UserSettings extends Model {
         theme: DataTypes.STRING,
         calendarViewFormat: DataTypes.STRING,
         itemsPerPage: DataTypes.TINYINT,
-        weightUnit: DataTypes.TINYINT,
+        favoritePetRecordId: DataTypes.STRING,
         userId: DataTypes.UUIDV4,
       },
       {

@@ -24,8 +24,8 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
       type: DataTypes.TINYINT,
       allowNull: true,
     },
-    weightUnit: {
-      type: DataTypes.TINYINT,
+    favoritePetRecordId: {
+      type: DataTypes.STRING,
       allowNull: true,
     },
     userId: {

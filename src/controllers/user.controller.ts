@@ -38,7 +38,7 @@ interface UpdateUserSettingsRequestBody {
   theme?: string;
   calendarViewFormat?: string;
   itemsPerPage?: number;
-  weightUnit?: string;
+  favoritePetRecordId?: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -188,7 +188,7 @@ const userController = {
         theme: Yup.string().required(),
         calendarViewFormat: Yup.string().required(),
         itemsPerPage: Yup.number().required(),
-        weightUnit: Yup.string().required(),
+        favoritePetRecordId: Yup.string().nullable(),
       });
 
       if (!(await schema.isValid(req.body))) throw new ValidationError();
