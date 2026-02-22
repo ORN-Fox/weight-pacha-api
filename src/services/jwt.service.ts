@@ -16,7 +16,7 @@ let jwtidCounter = 0;
 const blacklist: BlacklistedToken[] = [];
 
 const jwtService = {
-  init: async (): Promise<void> => {
+  init: () => {
     try {
       if (process.env.SERVER_JWT_ENABLED !== "true") throw new Error("[JWT] JWT is not enabled");
 
@@ -90,12 +90,9 @@ const jwtService = {
           const decodedPayload = decoded as JwtPayloadWithPayload;
 
           blacklist.forEach((element) => {
-            if (
-              element.jti === (decodedPayload as any).jti &&
-              element.iat === (decodedPayload as any).iat &&
-              element.exp === (decodedPayload as any).exp
-            )
+            if (element.jti === decodedPayload.jti && element.iat === decodedPayload.iat && element.exp === decodedPayload.exp) {
               reject(err);
+            }
           });
 
           resolve(decodedPayload.payload);

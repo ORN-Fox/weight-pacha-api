@@ -16,6 +16,10 @@ interface LoginRequestBody {
   rememberMe: boolean;
 }
 
+interface RefreshRequestBody {
+  refreshToken: string;
+}
+
 const loginController = {
   login: (async (req: Request<object, object, LoginRequestBody>, res: Response, next: NextFunction) => {
     try {
@@ -59,6 +63,41 @@ const loginController = {
       });
     } catch (error) {
       next(error);
+    }
+  }) as RequestHandler,
+
+  refresh: (async (req: Request<object, object, RefreshRequestBody>, res: Response) => {
+    try {
+      const { refreshToken } = req.body;
+
+      if (!refreshToken) {
+        throw new UnauthorizedError();
+      }
+
+      const decoded: Record<string, unknown> = jwtService.jwtVerify(refreshToken);
+
+      if (decoded.type !== "refresh") {
+        throw new UnauthorizedError();
+      }
+
+      // @ts-ignore
+      const user = await User.findByPk(decoded.id, {
+        include: [
+          { model: PetRecord, as: "PetRecords" },
+          { model: UserSettings, as: "Settings" },
+        ],
+      });
+
+      const accessToken = jwtService.jwtSign({ id: user.id });
+      const newRefreshToken = jwtService.jwtSignRefresh({ id: user.id, type: "refresh" });
+
+      return res.status(StatusCodes.OK).json({
+        user,
+        accessToken,
+        refreshToken: newRefreshToken,
+      });
+    } catch {
+      return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Invalid refresh token" });
     }
   }) as RequestHandler,
 
