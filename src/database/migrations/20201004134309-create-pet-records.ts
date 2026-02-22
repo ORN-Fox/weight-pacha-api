@@ -56,6 +56,14 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
       type: DataTypes.STRING(50),
       allowNull: true,
     },
+    healthWeight: {
+      type: DataTypes.FLOAT,
+      defaultValue: 1,
+    },
+    weightUnit: {
+      type: DataTypes.TINYINT,
+      defaultValue: 0, // KiloGram enum value
+    },
     description: {
       type: DataTypes.TEXT("long"),
       allowNull: true,

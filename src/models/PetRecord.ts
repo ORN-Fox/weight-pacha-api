@@ -44,6 +44,8 @@ class PetRecord extends Model {
         sterilizeDate: DataTypes.DATE,
         tagNumber: DataTypes.STRING(50),
         tagRageNumber: DataTypes.STRING(50),
+        healthWeight: DataTypes.FLOAT,
+        weightUnit: DataTypes.TINYINT,
         description: DataTypes.TEXT("long"),
         archivedAt: DataTypes.DATE,
       },

@@ -57,6 +57,8 @@ const petRecordController = {
         sterilizeDate: Yup.string().nullable(),
         tagNumber: Yup.string().nullable(),
         tagRageNumber: Yup.string().nullable(),
+        healthWeight: Yup.number().required(),
+        weightUnit: Yup.number().required(),
         description: Yup.string().nullable(),
       });
 
@@ -93,6 +95,8 @@ const petRecordController = {
         sterilizeDate: Yup.string().nullable(),
         tagNumber: Yup.string().nullable(),
         tagRageNumber: Yup.string().nullable(),
+        healthWeight: Yup.number().required(),
+        weightUnit: Yup.number().required(),
         description: Yup.string().nullable(),
         createdAt: Yup.date().required(),
       });
@@ -127,6 +131,8 @@ const petRecordController = {
         sterilizeDate: Yup.string().nullable(),
         tagNumber: Yup.string().nullable(),
         tagRageNumber: Yup.string().nullable(),
+        healthWeight: Yup.number().required(),
+        weightUnit: Yup.number().required(),
         description: Yup.string().nullable(),
         createdAt: Yup.date().required(),
       });
@@ -164,6 +170,8 @@ const petRecordController = {
         sterilizeDate: Yup.string().nullable(),
         tagNumber: Yup.string().nullable(),
         tagRageNumber: Yup.string().nullable(),
+        healthWeight: Yup.number().required(),
+        weightUnit: Yup.number().required(),
         description: Yup.string().nullable(),
         createdAt: Yup.date().required(),
       });
