@@ -4,6 +4,9 @@ import * as Yup from "yup";
 
 import { UnauthorizedError, ValidationError } from "@utils/ApiError.js";
 
+import { createUserSchema, updateUserSchema } from "@/schemas/user.schema";
+import { updateUserSettingsSchema } from "@/schemas/userSettings.schema";
+
 import Address from "@models/Address";
 import PetRecord from "@models/PetRecord";
 import User from "@models/User";
@@ -48,19 +51,10 @@ interface RequestWithUserId<P = any, ResBody = any, ReqBody = any, ReqQuery = an
 
 //Yup is a JavaScript schema builder for value parsing and validation.
 
-const MIN_PASSWORD_LENGTH: number = parseInt(process.env.MIN_PASSWORD_LENGTH ?? "8");
-const MAX_PASSWORD_LENGTH: number = parseInt(process.env.MAX_PASSWORD_LENGTH ?? "128");
-
 const userController = {
   add: (async (req: Request<object, object, CreateUserRequestBody>, res: Response, next: NextFunction) => {
     try {
-      const schema = Yup.object().shape({
-        name: Yup.string().required(),
-        email: Yup.string().email().required(),
-        password: Yup.string().required().min(MIN_PASSWORD_LENGTH).max(MAX_PASSWORD_LENGTH),
-      });
-
-      if (!(await schema.isValid(req.body))) throw new ValidationError();
+      if (!(await createUserSchema.isValid(req.body))) throw new ValidationError();
 
       const { email } = req.body;
 
@@ -139,31 +133,7 @@ const userController = {
 
   update: (async (req: RequestWithUserId<object, object, UpdateUserRequestBody>, res: Response, next: NextFunction) => {
     try {
-      const schema = Yup.object().shape({
-        id: Yup.string().uuid().required(),
-        name: Yup.string().required(),
-        email: Yup.string().email().required(),
-        oldPassword: Yup.string().min(MIN_PASSWORD_LENGTH).max(MAX_PASSWORD_LENGTH),
-        password: Yup.string()
-          .min(MIN_PASSWORD_LENGTH)
-          .max(MAX_PASSWORD_LENGTH)
-          .when("oldPassword", (oldPassword, field) => {
-            if (oldPassword) {
-              return field.required();
-            } else {
-              return field;
-            }
-          }),
-        confirmPassword: Yup.string().when("password", (password, field) => {
-          if (password) {
-            return field.required().oneOf([Yup.ref("password")]);
-          } else {
-            return field;
-          }
-        }),
-      });
-
-      if (!(await schema.isValid(req.body))) throw new ValidationError();
+      if (!(await updateUserSchema.isValid(req.body))) throw new ValidationError();
 
       const { oldPassword } = req.body;
 
@@ -182,16 +152,7 @@ const userController = {
 
   updateSettings: (async (req: RequestWithUserId<object, object, UpdateUserSettingsRequestBody>, res: Response, next: NextFunction) => {
     try {
-      const schema = Yup.object().shape({
-        id: Yup.string().uuid().required(),
-        locale: Yup.string().required(),
-        theme: Yup.string().required(),
-        calendarViewFormat: Yup.string().required(),
-        itemsPerPage: Yup.number().required(),
-        favoritePetRecordId: Yup.string().nullable(),
-      });
-
-      if (!(await schema.isValid(req.body))) throw new ValidationError();
+      if (!(await updateUserSettingsSchema.isValid(req.body))) throw new ValidationError();
 
       // @ts-ignore
       await UserSettings.update(req.body, { where: { userId: req.userId } });

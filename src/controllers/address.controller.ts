@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction, RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
-import * as Yup from "yup";
 
 import { ValidationError } from "@utils/ApiError.js";
+
+import { createAddressSchema } from "@/schemas/address.schema";
 
 import Address from "@models/Address.js";
 
@@ -16,14 +17,7 @@ interface AddressRequestBody {
 const addressController = {
   add: (async (req: Request<object, object, AddressRequestBody>, res: Response, next: NextFunction) => {
     try {
-      const schema = Yup.object().shape({
-        city: Yup.string().required(),
-        state: Yup.string().required(),
-        neighborhood: Yup.string().required(),
-        country: Yup.string().required(),
-      });
-
-      if (!(await schema.isValid(req.body))) throw new ValidationError();
+      if (!(await createAddressSchema.isValid(req.body))) throw new ValidationError();
 
       // @ts-ignore
       await Address.findOne({

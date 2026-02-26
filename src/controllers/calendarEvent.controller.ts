@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction, RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
-import * as Yup from "yup";
 
 import { ValidationError } from "@utils/ApiError";
+
+import { createCalendarEventSchema, updateCalendarEventSchema } from "@/schemas/calendarEvent.schema";
 
 import CalendarEvent, { CalendarEventSource } from "@models/CalendarEvent";
 import Vaccine from "@models/Vaccine";
@@ -64,18 +65,7 @@ const calendarEventController = {
 
   create: (async (req: Request<{ petRecordId: string }, object, CreateCalendarEventRequestBody>, res: Response, next: NextFunction) => {
     try {
-      const schema = Yup.object().shape({
-        title: Yup.string().required(),
-        startDate: Yup.date().required(),
-        description: Yup.string().nullable(),
-        eventSource: Yup.number().required(),
-        petRecordId: Yup.string().required(),
-
-        // vaccine or wormable related
-        reminderDate: Yup.date().nullable(),
-      });
-
-      if (!(await schema.isValid(req.body))) throw new ValidationError();
+      if (!(await createCalendarEventSchema.isValid(req.body))) throw new ValidationError();
 
       const calendarEventToCreate = req.body;
       let calendarEvent;
@@ -127,20 +117,7 @@ const calendarEventController = {
     next: NextFunction,
   ) => {
     try {
-      const schema = Yup.object().shape({
-        id: Yup.string().uuid().required(),
-        title: Yup.string().required(),
-        startDate: Yup.date().required(),
-        description: Yup.string().nullable(),
-        eventSource: Yup.number().required(),
-        petRecordId: Yup.string().required(),
-        createdAt: Yup.date().required(),
-
-        // vaccine or wormable related
-        reminderDate: Yup.date().nullable(),
-      });
-
-      if (!(await schema.isValid(req.body))) throw new ValidationError();
+      if (!(await updateCalendarEventSchema.isValid(req.body))) throw new ValidationError();
 
       const calendarEventToUpdate = req.body;
       let updatedCalendarEvent;

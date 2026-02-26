@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction, RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
-import * as Yup from "yup";
 
 import { ValidationError } from "@utils/ApiError.js";
+
+import { createNoteSchema, updateNoteSchema } from "@/schemas/note.schema";
 
 import Note from "@models/Note.js";
 
@@ -34,13 +35,7 @@ const noteController = {
 
   create: (async (req: Request<object, object, CreateNoteRequestBody>, res: Response, next: NextFunction) => {
     try {
-      const schema = Yup.object().shape({
-        name: Yup.string().required(),
-        description: Yup.string().nullable(),
-        petRecordId: Yup.string().required(),
-      });
-
-      if (!(await schema.isValid(req.body))) throw new ValidationError();
+      if (!(await createNoteSchema.isValid(req.body))) throw new ValidationError();
 
       // @ts-ignore
       const note = await Note.create(req.body);
@@ -53,15 +48,7 @@ const noteController = {
 
   update: (async (req: Request<{ noteId: string }, object, UpdateNoteRequestBody>, res: Response, next: NextFunction) => {
     try {
-      const schema = Yup.object().shape({
-        id: Yup.string().uuid().required(),
-        name: Yup.string().required(),
-        description: Yup.string().nullable(),
-        petRecordId: Yup.string().required(),
-        createdAt: Yup.date().required(),
-      });
-
-      if (!(await schema.isValid(req.body))) throw new ValidationError();
+      if (!(await updateNoteSchema.isValid(req.body))) throw new ValidationError();
 
       // @ts-ignore
       await Note.update(req.body, { where: { id: req.params.noteId } });
