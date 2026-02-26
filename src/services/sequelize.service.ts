@@ -8,12 +8,11 @@ import Measure from "@models/Measure.js";
 import Note from "@models/Note.js";
 import PetRecord from "@models/PetRecord.js";
 import User from "@models/User.js";
+import UserAddress from "@models/UserAddress.js";
+import UserPetRecord from "@models/UserPetRecord.js";
 import UserSettings from "@models/UserSettings.js";
 import Vaccine from "@models/Vaccine.js";
 import Wormable from "@models/Wormable.js";
-
-import UserAddress from "@models/UserAddress.js";
-import UserPetRecord from "@models/UserPetRecord.js";
 
 let connection: Sequelize;
 
