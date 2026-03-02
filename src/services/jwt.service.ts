@@ -9,7 +9,7 @@ interface BlacklistedToken {
 }
 
 interface JwtPayloadWithPayload extends JwtPayload {
-  payload: Record<string, any>;
+  payload: Record<string, unknown>;
 }
 
 let jwtidCounter = 0;
@@ -27,16 +27,17 @@ const jwtService = {
     }
   },
 
-  jwtSign: (_payload: Record<string, any>): string => {
+  jwtSign: (_payload: Record<string, unknown>): string => {
     try {
       if (process.env.SERVER_JWT_ENABLED !== "true") throw new Error("[JWT] Fastify JWT flag is not setted");
+      if (!process.env.SERVER_JWT_SECRET) throw new Error("[JWT] JWT secret is not setted");
 
       console.log("[JWT] Generating fastify JWT sign");
 
       const payload = JSON.parse(JSON.stringify(_payload));
 
       jwtidCounter = jwtidCounter + 1;
-      return jwt.sign({ payload }, process.env.SERVER_JWT_SECRET as string, {
+      return jwt.sign({ payload }, process.env.SERVER_JWT_SECRET, {
         expiresIn: Number(process.env.SERVER_JWT_TIMEOUT),
         jwtid: jwtidCounter.toString(),
       });
@@ -46,9 +47,10 @@ const jwtService = {
     }
   },
 
-  jwtSignRefresh: (_payload: Record<string, any>): string => {
+  jwtSignRefresh: (_payload: Record<string, unknown>): string => {
     try {
       if (process.env.SERVER_JWT_ENABLED !== "true") throw new Error("[JWT] Fastify JWT flag is not setted");
+      if (!process.env.SERVER_JWT_SECRET) throw new Error("[JWT] JWT secret is not setted");
 
       console.log("[JWT] Generating fastify JWT refresh sign");
 
@@ -56,7 +58,7 @@ const jwtService = {
 
       jwtidCounter = jwtidCounter + 1;
       // Long duration for the refreshToken (7 days)
-      return jwt.sign({ payload }, process.env.SERVER_JWT_SECRET as string, {
+      return jwt.sign({ payload }, process.env.SERVER_JWT_SECRET, {
         expiresIn: 60 * 60 * 24 * 7, // 7 days
         jwtid: jwtidCounter.toString(),
       });
@@ -70,7 +72,7 @@ const jwtService = {
     try {
       if (process.env.SERVER_JWT_ENABLED !== "true") throw new Error("[JWT] JWT flag is not setted");
 
-      if (!request.headers.authorization || request.headers.authorization.split(" ")[0] !== "Bearer") throw new Error("[JWT] JWT token not provided");
+      if (request.headers.authorization?.split(" ")[0] !== "Bearer") throw new Error("[JWT] JWT token not provided");
 
       return request.headers.authorization.split(" ")[1];
     } catch (error) {
@@ -84,7 +86,9 @@ const jwtService = {
       if (process.env.SERVER_JWT_ENABLED !== "true") throw new Error("[JWT] JWT flag is not setted");
 
       return new Promise((resolve, reject) => {
-        jwt.verify(token, process.env.SERVER_JWT_SECRET as string, (err: Error | null, decoded: any) => {
+        if (!process.env.SERVER_JWT_SECRET) throw new Error("[JWT] JWT secret is not setted");
+
+        jwt.verify(token, process.env.SERVER_JWT_SECRET, (err: Error | null, decoded: unknown) => {
           if (err) reject(err);
 
           const decodedPayload = decoded as JwtPayloadWithPayload;
@@ -111,12 +115,14 @@ const jwtService = {
         blacklist.shift();
       }
 
-      const decoded = jwt.decode(token) as JwtPayload;
-      if (!decoded) throw new Error("Invalid token");
+      const decoded = jwt.decode(token);
+      if (!decoded || typeof decoded === "string") throw new Error("Invalid token");
 
       const { jti, exp, iat } = decoded;
+      if (!jti || !exp || !iat) throw new Error("Invalid token");
+
       console.log(`[JWT] Adding JWT ${token} with id ${jti} to blacklist`);
-      blacklist.push({ jti: jti as string, exp: exp as number, iat: iat as number });
+      blacklist.push({ jti, exp, iat });
     } catch (error) {
       console.log("[JWT] Error blacklisting fastify JWT token");
       throw error;
