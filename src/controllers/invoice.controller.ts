@@ -3,7 +3,7 @@ import { StatusCodes } from "http-status-codes";
 
 import { ValidationError } from "@utils/ApiError.js";
 
-import { createCalendarEventSchema, updateCalendarEventSchema } from "@/schemas/calendarEvent.schema";
+import { createInvoiceSchema, updateInvoiceSchema } from "@/schemas/invoice.schema";
 
 import Invoice from "@models/Invoice.js";
 
@@ -37,7 +37,7 @@ const invoiceController = {
 
   create: (async (req: Request<{ petRecordId: string }, object, CreateInvoiceRequestBody>, res: Response, next: NextFunction) => {
     try {
-      if (!(await createCalendarEventSchema.isValid(req.body))) throw new ValidationError();
+      if (!(await createInvoiceSchema.isValid(req.body))) throw new ValidationError();
 
       // @ts-ignore
       const invoice = await Invoice.create(req.body);
@@ -50,7 +50,7 @@ const invoiceController = {
 
   update: (async (req: Request<{ petRecordId: string; invoiceId: string }, object, UpdateInvoiceRequestBody>, res: Response, next: NextFunction) => {
     try {
-      if (!(await updateCalendarEventSchema.isValid(req.body))) throw new ValidationError();
+      if (!(await updateInvoiceSchema.isValid(req.body))) throw new ValidationError();
 
       // @ts-ignore
       await Invoice.update(req.body, { where: { id: req.params.invoiceId } });

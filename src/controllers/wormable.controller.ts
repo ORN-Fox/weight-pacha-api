@@ -3,7 +3,7 @@ import { StatusCodes } from "http-status-codes";
 
 import { ValidationError } from "@utils/ApiError.js";
 
-import { createCalendarEventSchema, updateCalendarEventSchema } from "@/schemas/calendarEvent.schema";
+import { createWormableSchema, updateWormableSchema } from "@/schemas/wormable.schema";
 
 import Wormable from "@models/Wormable.js";
 
@@ -38,7 +38,7 @@ const wormableController = {
 
   create: (async (req: Request<{ petRecordId: string }, object, CreateWormableRequestBody>, res: Response, next: NextFunction) => {
     try {
-      if (!(await createCalendarEventSchema.isValid(req.body))) throw new ValidationError();
+      if (!(await createWormableSchema.isValid(req.body))) throw new ValidationError();
 
       // @ts-ignore
       const wormable = await Wormable.create(req.body);
@@ -55,7 +55,7 @@ const wormableController = {
     next: NextFunction,
   ) => {
     try {
-      if (!(await updateCalendarEventSchema.isValid(req.body))) throw new ValidationError();
+      if (!(await updateWormableSchema.isValid(req.body))) throw new ValidationError();
 
       // @ts-ignore
       await Wormable.update(req.body, { where: { id: req.params.wormableId } });
