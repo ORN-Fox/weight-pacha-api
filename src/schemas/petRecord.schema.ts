@@ -1,5 +1,12 @@
 import * as Yup from "yup";
 
+enum UnitType {
+  KiloGram = 0,
+  Pounds,
+  Gram,
+  Ounce,
+}
+
 const createPetRecordSchema = Yup.object().shape({
   firstName: Yup.string().required(),
   lastName: Yup.string().nullable(),
@@ -13,8 +20,8 @@ const createPetRecordSchema = Yup.object().shape({
   sterilizeDate: Yup.string().nullable(),
   tagNumber: Yup.string().nullable(),
   tagRageNumber: Yup.string().nullable(),
-  healthWeight: Yup.number().required(),
-  weightUnit: Yup.number().required(),
+  healthWeight: Yup.number().required().default(1),
+  weightUnit: Yup.number().required().default(UnitType.KiloGram),
   description: Yup.string().nullable(),
 });
 
