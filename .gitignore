@@ -6,6 +6,8 @@
 # Dependencies
 /node_modules
 
+# Logs
+/logs
+
 # TypeScript build output
 /dist
-server.log
