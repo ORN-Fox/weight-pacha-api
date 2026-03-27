@@ -2,9 +2,12 @@ import express, { Express, Router } from "express";
 import fs from "fs";
 import bodyParser from "body-parser";
 import cors from "cors";
-import globalErrorHandler from "../middlewares/errorHandler.middleware.js";
 import { fileURLToPath, pathToFileURL } from "url";
 import { dirname } from "path";
+
+import logger from "./logger.service";
+
+import globalErrorHandler from "../middlewares/errorHandler.middleware.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -56,12 +59,12 @@ const expressService: ExpressService = {
 
       const port = process.env.SERVER_PORT ?? "3000";
       server.listen(port, () => {
-        console.log(`[EXPRESS] Server listening on port ${port}`);
+        logger.info(`[EXPRESS] Server listening on port ${port}`);
       });
 
-      console.log("[EXPRESS] Express initialized");
+      logger.info("[EXPRESS] Express initialized");
     } catch (error) {
-      console.log("[EXPRESS] Error during express service initialization");
+      console.error("[EXPRESS] Error during express service initialization");
       throw error;
     }
   },

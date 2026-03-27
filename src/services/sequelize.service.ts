@@ -1,4 +1,7 @@
 import { Sequelize } from "sequelize";
+
+import logger from "./logger.service";
+
 import databaseConfig from "@config/database.js";
 
 import Address from "@models/Address.js";
@@ -58,10 +61,10 @@ const sequelizeService: SequelizeService = {
       });
 
       await connection.authenticate();
-      console.log("[SEQUELIZE] Database connection authenticated");
-      console.log("[SEQUELIZE] Database service initialized");
+      logger.info("[SEQUELIZE] Database connection authenticated");
+      logger.info("[SEQUELIZE] Database service initialized");
     } catch (error) {
-      console.log("[SEQUELIZE] Error during database service initialization");
+      logger.error("[SEQUELIZE] Error during database service initialization");
       throw error;
     }
   },

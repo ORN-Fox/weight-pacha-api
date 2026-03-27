@@ -3,6 +3,8 @@ import { StatusCodes } from "http-status-codes";
 
 import { ValidationError } from "@utils/ApiError";
 
+import logger from "@/services/logger.service";
+
 import { createCalendarEventSchema, updateCalendarEventSchema } from "@/schemas/calendarEvent.schema";
 
 import CalendarEvent, { CalendarEventSource } from "@models/CalendarEvent";
@@ -59,6 +61,7 @@ const calendarEventController = {
 
       return res.status(StatusCodes.OK).json(aggregateEvents);
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as unknown as RequestHandler,
@@ -107,6 +110,7 @@ const calendarEventController = {
 
       return res.status(StatusCodes.OK).json(calendarEvent);
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as RequestHandler<{ petRecordId: string }, object, CreateCalendarEventRequestBody>,
@@ -173,6 +177,7 @@ const calendarEventController = {
 
       return res.status(StatusCodes.OK).json(updatedCalendarEvent);
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as RequestHandler<{ petRecordId: string; calendarEventId: string }, object, UpdateCalendarEventRequestBody>,
@@ -200,6 +205,7 @@ const calendarEventController = {
 
       return res.status(StatusCodes.OK).json({ msg: "Deleted" });
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as RequestHandler<{ petRecordId: string; calendarEventId: string; eventSource: string }>,

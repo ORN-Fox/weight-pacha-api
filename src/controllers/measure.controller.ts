@@ -3,6 +3,8 @@ import { StatusCodes } from "http-status-codes";
 
 import { ValidationError } from "@utils/ApiError.js";
 
+import logger from "@/services/logger.service";
+
 import { createMeasureSchema, updateMeasureSchema } from "@/schemas/measure.schema";
 
 import Measure from "@models/Measure.js";
@@ -30,6 +32,7 @@ const measureController = {
 
       return res.status(StatusCodes.OK).json(measures);
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as unknown as RequestHandler,
@@ -43,6 +46,7 @@ const measureController = {
 
       return res.status(StatusCodes.OK).json(measure);
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as RequestHandler<{ petRecordId: string }, object, CreateMeasureRequestBody>,
@@ -59,6 +63,7 @@ const measureController = {
 
       return res.status(StatusCodes.OK).json(updatedMeasure);
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as RequestHandler<{ petRecordId: string; measureId: string }, object, UpdateMeasureRequestBody>,
@@ -70,6 +75,7 @@ const measureController = {
 
       return res.status(StatusCodes.OK).json({ msg: "Deleted" });
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as RequestHandler<{ petRecordId: string; measureId: string }>,

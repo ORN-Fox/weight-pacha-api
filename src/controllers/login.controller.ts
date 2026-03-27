@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import { UnauthorizedError, ValidationError } from "@utils/ApiError.js";
 
 import jwtService from "@services/jwt.service.js";
+import logger from "@/services/logger.service";
 
 import PetRecord from "@models/PetRecord";
 import User from "@models/User";
@@ -62,6 +63,7 @@ const loginController = {
         refreshToken,
       });
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as RequestHandler,
@@ -96,7 +98,8 @@ const loginController = {
         accessToken,
         refreshToken: newRefreshToken,
       });
-    } catch {
+    } catch (error) {
+      logger.error(error);
       return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Invalid refresh token" });
     }
   }) as RequestHandler,
@@ -107,7 +110,8 @@ const loginController = {
       jwtService.jwtBlacklistToken(token);
 
       res.status(StatusCodes.OK).json({ msg: "Authorized" });
-    } catch {
+    } catch (error) {
+      logger.error(error);
       // Sending always 200 for prevent refresh infinite loop
       res.status(StatusCodes.OK).json({ msg: "Authorized" });
     }

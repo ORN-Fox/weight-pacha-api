@@ -3,6 +3,8 @@ import { StatusCodes } from "http-status-codes";
 
 import { ValidationError } from "@utils/ApiError.js";
 
+import logger from "@/services/logger.service";
+
 import { createVaccineSchema, updateVaccineSchema } from "@/schemas/vaccine.schema";
 
 import Vaccine from "@models/Vaccine.js";
@@ -32,6 +34,7 @@ const vaccineController = {
 
       return res.status(StatusCodes.OK).json(vaccines);
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as unknown as RequestHandler,
@@ -45,6 +48,7 @@ const vaccineController = {
 
       return res.status(StatusCodes.OK).json(vaccine);
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as RequestHandler<{ petRecordId: string }, object, CreateVaccineRequestBody>,
@@ -61,6 +65,7 @@ const vaccineController = {
 
       return res.status(StatusCodes.OK).json(updatedVaccine);
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as RequestHandler<{ petRecordId: string; vaccineId: string }, object, UpdateVaccineRequestBody>,
@@ -72,6 +77,7 @@ const vaccineController = {
 
       return res.status(StatusCodes.OK).json({ msg: "Deleted" });
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as RequestHandler<{ petRecordId: string; vaccineId: string }>,

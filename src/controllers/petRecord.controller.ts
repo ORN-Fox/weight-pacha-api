@@ -3,6 +3,8 @@ import { StatusCodes } from "http-status-codes";
 
 import { ValidationError } from "@utils/ApiError.js";
 
+import logger from "@/services/logger.service";
+
 import { createPetRecordSchema, updatePetRecordSchema } from "@/schemas/petRecord.schema";
 
 import PetRecord from "@models/PetRecord.js";
@@ -39,6 +41,7 @@ const petRecordController = {
 
       return res.status(StatusCodes.OK).json(petRecord);
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as unknown as RequestHandler,
@@ -58,6 +61,7 @@ const petRecordController = {
 
       return res.status(StatusCodes.OK).json(petRecord);
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as RequestHandler,
@@ -74,6 +78,7 @@ const petRecordController = {
 
       return res.status(StatusCodes.OK).json(updatedPetRecord);
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as RequestHandler<{ id: string }, object, UpdatePetRecordRequestBody>,
@@ -93,6 +98,7 @@ const petRecordController = {
 
       return res.status(StatusCodes.OK).json(updatedPetRecord);
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as RequestHandler<{ id: string }, object, UpdatePetRecordRequestBody>,
@@ -112,6 +118,7 @@ const petRecordController = {
 
       return res.status(StatusCodes.OK).json(updatedPetRecord);
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as RequestHandler<{ id: string }, object, UpdatePetRecordRequestBody>,

@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 
+import logger from "@services/logger.service";
+
 import { IsApiError } from "@utils/ApiError.js";
 
 const currentEnv = process.env.NODE_ENV ?? "development";
@@ -21,11 +23,11 @@ export default (err: Error, _req: Request, res: Response, next: NextFunction): v
   }
 
   if (currentEnv === "development") {
-    console.log(err);
+    logger.error(err);
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message);
     return;
   }
 
-  console.log(err);
+  logger.error(err);
   res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Something went wrong");
 };

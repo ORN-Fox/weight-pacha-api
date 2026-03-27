@@ -3,6 +3,8 @@ import { StatusCodes } from "http-status-codes";
 
 import { ValidationError } from "@utils/ApiError.js";
 
+import logger from "@/services/logger.service";
+
 import { createInvoiceSchema, updateInvoiceSchema } from "@/schemas/invoice.schema";
 
 import Invoice from "@models/Invoice.js";
@@ -31,6 +33,7 @@ const invoiceController = {
 
       return res.status(StatusCodes.OK).json(invoices);
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as unknown as RequestHandler,
@@ -44,6 +47,7 @@ const invoiceController = {
 
       return res.status(StatusCodes.OK).json(invoice);
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as RequestHandler<{ petRecordId: string }, object, CreateInvoiceRequestBody>,
@@ -60,6 +64,7 @@ const invoiceController = {
 
       return res.status(StatusCodes.OK).json(updatedInvoice);
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as RequestHandler<{ petRecordId: string; invoiceId: string }, object, UpdateInvoiceRequestBody>,
@@ -71,6 +76,7 @@ const invoiceController = {
 
       return res.status(StatusCodes.OK).json({ msg: "Deleted" });
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as RequestHandler<{ petRecordId: string; invoiceId: string }>,

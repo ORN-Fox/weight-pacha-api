@@ -1,6 +1,8 @@
 import dotenv from "dotenv";
+
 import expressService from "./services/express.service.js";
 import jwtService from "./services/jwt.service.js";
+import logger from "./services/logger.service.js";
 import sequelizeService from "./services/sequelize.service.js";
 
 dotenv.config();
@@ -13,26 +15,26 @@ await (async (): Promise<void> => {
       await service.init();
     }
 
-    console.log("[SERVER] All services initialized successfully");
-    console.log("[SERVER] API is ready and waiting for connections...");
+    logger.info("[SERVER] All services initialized successfully");
+    logger.info("[SERVER] API is ready and waiting for connections...");
 
     // Log process events to diagnose unexpected exits
     process.on("exit", (code) => {
-      console.log(`[SERVER] Process exit event with code: ${code.toString()}`);
+      logger.info(`[SERVER] Process exit event with code: ${code.toString()}`);
     });
     process.on("SIGINT", () => {
-      console.log("[SERVER] Received SIGINT. Shutting down...");
+      logger.info("[SERVER] Received SIGINT. Shutting down...");
       process.exit(0);
     });
     process.on("SIGTERM", () => {
-      console.log("[SERVER] Received SIGTERM. Shutting down...");
+      logger.info("[SERVER] Received SIGTERM. Shutting down...");
       process.exit(0);
     });
     process.on("beforeExit", (code) => {
-      console.log(`[SERVER] beforeExit event with code: ${code.toString()}`);
+      logger.info(`[SERVER] beforeExit event with code: ${code.toString()}`);
     });
   } catch (error) {
-    console.error("[SERVER] Initialization error:", error);
+    logger.error("[SERVER] Initialization error:", error);
     process.exit(1);
   }
 })();
@@ -42,11 +44,11 @@ process.stdin.resume();
 
 // Handle unhandled errors
 process.on("uncaughtException", (error) => {
-  console.error("[SERVER] Uncaught Exception:", error);
+  logger.error("[SERVER] Uncaught Exception:", error);
   process.exit(1);
 });
 
 process.on("unhandledRejection", (reason, promise) => {
-  console.error("[SERVER] Unhandled Rejection at:", promise, "reason:", reason);
+  logger.error("[SERVER] Unhandled Rejection at:", promise, "reason:", reason);
   process.exit(1);
 });

@@ -3,6 +3,7 @@ import { Request, Response, NextFunction, RequestHandler } from "express";
 import { BadTokenError } from "@utils/ApiError.js";
 
 import jwtService from "@services/jwt.service.js";
+import logger from "@/services/logger.service";
 
 const authMiddleware: RequestHandler = async (req: Request, _res: Response, next: NextFunction) => {
   try {
@@ -19,7 +20,8 @@ const authMiddleware: RequestHandler = async (req: Request, _res: Response, next
     req.userId = decoded.id;
 
     next();
-  } catch {
+  } catch (error) {
+    logger.error(error);
     next(new BadTokenError());
   }
 };

@@ -4,6 +4,8 @@ import * as Yup from "yup";
 
 import { UnauthorizedError, ValidationError } from "@utils/ApiError.js";
 
+import logger from "@/services/logger.service";
+
 import { createUserSchema, updateUserSchema } from "@/schemas/user.schema";
 import { updateUserSettingsSchema } from "@/schemas/userSettings.schema";
 
@@ -68,6 +70,7 @@ const userController = {
 
       return res.status(StatusCodes.OK).json(user);
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as RequestHandler,
@@ -101,6 +104,7 @@ const userController = {
 
       return res.status(StatusCodes.OK).json(user);
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as RequestHandler,
@@ -127,6 +131,7 @@ const userController = {
 
       return res.status(StatusCodes.OK).json(user);
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as unknown as RequestHandler,
@@ -146,6 +151,7 @@ const userController = {
 
       return res.status(StatusCodes.OK).json(newUser);
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as RequestHandler,
@@ -162,6 +168,7 @@ const userController = {
 
       return res.status(StatusCodes.OK).json(updatedUserSettings);
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as RequestHandler,
@@ -176,6 +183,7 @@ const userController = {
 
       return res.status(StatusCodes.OK).json({ msg: "Deleted" });
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as unknown as RequestHandler,

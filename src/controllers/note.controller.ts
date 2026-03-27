@@ -3,6 +3,8 @@ import { StatusCodes } from "http-status-codes";
 
 import { ValidationError } from "@utils/ApiError.js";
 
+import logger from "@/services/logger.service";
+
 import { createNoteSchema, updateNoteSchema } from "@/schemas/note.schema";
 
 import Note from "@models/Note.js";
@@ -29,6 +31,7 @@ const noteController = {
 
       return res.status(StatusCodes.OK).json(measures);
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as unknown as RequestHandler,
@@ -42,6 +45,7 @@ const noteController = {
 
       return res.status(StatusCodes.OK).json(note);
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as RequestHandler,
@@ -58,6 +62,7 @@ const noteController = {
 
       return res.status(StatusCodes.OK).json(updatedNote);
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as RequestHandler<{ noteId: string }, object, UpdateNoteRequestBody>,
@@ -69,6 +74,7 @@ const noteController = {
 
       return res.status(StatusCodes.OK).json({ msg: "Deleted" });
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as RequestHandler<{ noteId: string }>,

@@ -3,6 +3,8 @@ import { StatusCodes } from "http-status-codes";
 
 import { ValidationError } from "@utils/ApiError.js";
 
+import logger from "@/services/logger.service";
+
 import { createWormableSchema, updateWormableSchema } from "@/schemas/wormable.schema";
 
 import Wormable from "@models/Wormable.js";
@@ -32,6 +34,7 @@ const wormableController = {
 
       return res.status(StatusCodes.OK).json(wormables);
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as unknown as RequestHandler,
@@ -45,6 +48,7 @@ const wormableController = {
 
       return res.status(StatusCodes.OK).json(wormable);
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as RequestHandler<{ petRecordId: string }, object, CreateWormableRequestBody>,
@@ -65,6 +69,7 @@ const wormableController = {
 
       return res.status(StatusCodes.OK).json(updatedWormable);
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as RequestHandler<{ petRecordId: string; wormableId: string }, object, UpdateWormableRequestBody>,
@@ -76,6 +81,7 @@ const wormableController = {
 
       return res.status(StatusCodes.OK).json({ msg: "Deleted" });
     } catch (error) {
+      logger.error(error);
       next(error);
     }
   }) as RequestHandler<{ petRecordId: string; wormableId: string }>,
