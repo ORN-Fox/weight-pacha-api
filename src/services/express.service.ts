@@ -1,4 +1,5 @@
 import express, { Express, Router } from "express";
+import rateLimit from "express-rate-limit";
 import fs from "fs";
 import bodyParser from "body-parser";
 import cors from "cors";
@@ -17,6 +18,11 @@ const routeFiles = fs.readdirSync(routesDir);
 
 let server: Express;
 const routes: Router[] = [];
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+});
 
 const corsOptions = {
   origin: "*", // TODO replace by valid origin for restrict access (security)
@@ -50,6 +56,8 @@ const expressService: ExpressService = {
       routes.forEach((route) => {
         server.use(route);
       });
+
+      server.use(limiter);
 
       server.get("/", (_req, res) => {
         res.send("Hello World!");
