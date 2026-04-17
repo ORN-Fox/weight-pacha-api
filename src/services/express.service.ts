@@ -3,6 +3,7 @@ import rateLimit from "express-rate-limit";
 import fs from "fs";
 import bodyParser from "body-parser";
 import cors from "cors";
+import helmet from "helmet";
 import { fileURLToPath, pathToFileURL } from "url";
 import { dirname } from "path";
 
@@ -58,6 +59,7 @@ const expressService: ExpressService = {
       });
 
       server.use(limiter);
+      server.use(helmet());
 
       server.get("/", (_req, res) => {
         res.send("Hello World!");
