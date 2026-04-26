@@ -12,4 +12,4 @@ noteRoutes.post("/pet-record/:petRecordId/note", authMiddleware, petRecordMiddle
 noteRoutes.put("/pet-record/:petRecordId/note/:noteId", authMiddleware, petRecordMiddleware, noteController.update);
 noteRoutes.delete("/pet-record/:petRecordId/note/:noteId", authMiddleware, petRecordMiddleware, noteController.delete);
 
-export { noteRoutes as measureRoutes };
+export { noteRoutes };
