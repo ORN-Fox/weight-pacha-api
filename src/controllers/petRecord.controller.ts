@@ -23,6 +23,8 @@ interface CreatePetRecordRequestBody {
   sterilizeDate: string;
   tagNumber: string;
   tagRageNumber: string;
+  weightHealth: number;
+  weightUnit: number;
   description: string;
 }
 

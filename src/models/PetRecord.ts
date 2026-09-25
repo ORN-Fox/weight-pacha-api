@@ -14,6 +14,8 @@ class PetRecord extends Model {
   declare sequelizeDate: Date;
   declare tagNumber: string;
   declare tagRageNumber: string;
+  declare weightHealth: number;
+  declare weightUnit: number;
   declare description: string;
   declare readonly createdAt: Date;
   declare readonly updatedAt: Date;
@@ -44,8 +46,14 @@ class PetRecord extends Model {
         sterilizeDate: DataTypes.DATE,
         tagNumber: DataTypes.STRING(50),
         tagRageNumber: DataTypes.STRING(50),
-        healthWeight: DataTypes.FLOAT,
-        weightUnit: DataTypes.TINYINT,
+        weightHealth: {
+          type: DataTypes.FLOAT,
+          defaultValue: 1,
+        },
+        weightUnit: {
+          type: DataTypes.TINYINT,
+          defaultValue: 0, // Equal kg unit in enum
+        },
         description: DataTypes.TEXT("long"),
         archivedAt: DataTypes.DATE,
       },

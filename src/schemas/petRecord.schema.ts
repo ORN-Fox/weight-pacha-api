@@ -20,7 +20,7 @@ const createPetRecordSchema = Yup.object().shape({
   sterilizeDate: Yup.string().nullable(),
   tagNumber: Yup.string().nullable(),
   tagRageNumber: Yup.string().nullable(),
-  healthWeight: Yup.number().required().default(1),
+  weightHealth: Yup.number().required().default(1),
   weightUnit: Yup.number().required().default(UnitType.KiloGram),
   description: Yup.string().nullable(),
 });
@@ -39,7 +39,7 @@ const updatePetRecordSchema = Yup.object().shape({
   sterilizeDate: Yup.string().nullable(),
   tagNumber: Yup.string().nullable(),
   tagRageNumber: Yup.string().nullable(),
-  healthWeight: Yup.number().required(),
+  weightHealth: Yup.number().required(),
   weightUnit: Yup.number().required(),
   description: Yup.string().nullable(),
   createdAt: Yup.date().required(),

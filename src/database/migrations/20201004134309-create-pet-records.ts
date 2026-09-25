@@ -56,7 +56,7 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
       type: DataTypes.STRING(50),
       allowNull: true,
     },
-    healthWeight: {
+    weightHealth: {
       type: DataTypes.FLOAT,
       defaultValue: 1,
     },
