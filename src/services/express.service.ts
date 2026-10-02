@@ -36,7 +36,7 @@ const expressService: ExpressService = {
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
         credentials: true,
         optionsSuccessStatus: 204,
-        allowedHeaders: "Content-Type, Authorization, Content-Length",
+        allowedHeaders: "Content-Type, Authorization, Content-Length, Accept",
       };
 
       const routes: Router[] = [
