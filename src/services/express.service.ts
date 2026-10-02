@@ -32,7 +32,7 @@ const expressService: ExpressService = {
       });
 
       const corsOptions = {
-        origin: "*", // TODO replace by valid origin for restrict access (security)
+        origin: [process.env.CLIENT_BASE_URL],
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
         credentials: true,
         optionsSuccessStatus: 204,
